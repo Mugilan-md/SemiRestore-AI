@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary-blue: #0F62FE;
+    --cyan-accent: #00AEEF;
+    --royal-blue: #2563EB;
+    --bg-light: #F8FAFC;
+    --bg-white: #FFFFFF;
+    --border-light: rgba(226, 232, 240, 0.8);
+    --glass-bg: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(15, 98, 254, 0.12);
+  }
+
+  body {
+    background-color: #F8FAFC;
+    color: #0F172A;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', 'Inter', sans-serif;
+  }
+}
+
+/* Custom Semiconductor Grid & Circuit Texture */
+.bg-semicon-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(15, 98, 254, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 98, 254, 0.04) 1px, transparent 1px);
+}
+
+.bg-circuit-dots {
+  background-image: radial-gradient(rgba(15, 98, 254, 0.15) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Enterprise Glassmorphism Cards */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px -10px rgba(15, 98, 254, 0.05), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+}
+
+.glass-panel-interactive {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(15, 98, 254, 0.12);
+  box-shadow: 0 10px 30px -10px rgba(15, 98, 254, 0.06), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-interactive:hover {
+  border-color: rgba(15, 98, 254, 0.35);
+  box-shadow: 0 20px 40px -12px rgba(15, 98, 254, 0.15), 0 8px 24px -4px rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(241, 245, 249, 0.8);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(15, 98, 254, 0.25);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 98, 254, 0.5);
+}
+
+/* Pulse Glowing Circuits */
+@keyframes circuitGlow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.03); }
+}
+
+.animate-circuit-glow {
+  animation: circuitGlow 4s infinite ease-in-out;
+}
+
+/* Glowing text gradients */
+.text-gradient-brand {
+  background: linear-gradient(135deg, #0F62FE 0%, #00AEEF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-dark {
+  background: linear-gradient(135deg, #0F172A 0%, #334155 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
