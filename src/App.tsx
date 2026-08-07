@@ -32,7 +32,13 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-moondust-mesh text-slate-900 flex flex-col font-sans selection:bg-[#CEB5FF] selection:text-slate-900 relative">
+      {/* Background Ambient Moon Dust Glow Orbs */}
+      <div className="fixed top-0 left-1/4 w-[600px] h-[500px] bg-[#CEB5FF]/30 blur-[130px] rounded-full pointer-events-none -z-10" />
+      <div className="fixed top-1/3 right-10 w-[550px] h-[450px] bg-[#8EC1DE]/35 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="fixed bottom-10 left-10 w-[500px] h-[400px] bg-[#80A8FF]/25 blur-[120px] rounded-full pointer-events-none -z-10" />
+      <div className="fixed bottom-20 right-1/4 w-[450px] h-[400px] bg-[#D3D3FF]/35 blur-[110px] rounded-full pointer-events-none -z-10" />
+
       {/* Top Navbar Header */}
       <Navbar
         activeTab={activeTab}
@@ -42,7 +48,7 @@ export function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1 pb-16">
+      <main className="flex-1 pb-16 relative z-10">
         {activeTab === 'landing' && <LandingPage setActiveTab={setActiveTab} />}
 
         {activeTab === 'dashboard' && (
@@ -114,16 +120,16 @@ export function App() {
         )}
       </main>
 
-      {/* Enterprise Footer */}
-      <footer className="border-t border-slate-200/80 bg-white py-6 text-xs text-slate-500">
+      {/* Enterprise Footer with Moon Dust & Shimmering Gold Accents */}
+      <footer className="border-t border-[#CEB5FF]/50 bg-white/70 backdrop-blur-md py-6 text-xs text-slate-600 relative z-10">
         <div className="mx-auto flex max-w-7xl flex-col sm:flex-row items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
           <p>© 2026 SemiRestore AI Inc. Engineered for Intel, TSMC, NVIDIA & Samsung Metrology.</p>
-          <div className="flex items-center gap-4 text-slate-400">
-            <span>Restormer v2.4 FP16</span>
+          <div className="flex items-center gap-4 text-slate-500 font-medium">
+            <span className="text-gold-glitter font-bold">Restormer v2.4 FP16</span>
             <span>•</span>
-            <span>NVIDIA H100 Accelerated</span>
+            <span className="text-gold-glitter font-bold">NVIDIA H100 Accelerated</span>
             <span>•</span>
-            <span>ISO/IEC 27001 Certified</span>
+            <span className="text-[#80A8FF] font-semibold">ISO/IEC 27001 Certified</span>
           </div>
         </div>
       </footer>

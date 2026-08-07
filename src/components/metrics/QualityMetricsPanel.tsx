@@ -7,7 +7,6 @@ import {
   Server,
   ZoomIn,
   ShieldCheck,
-  BarChart3,
   TrendingUp,
   Clock,
 } from 'lucide-react';
@@ -23,16 +22,16 @@ export const QualityMetricsPanel: React.FC<QualityMetricsPanelProps> = ({ metric
       value: `${metrics.psnr} dB`,
       sub: `+${metrics.snrGainDb} dB SNR Gain`,
       icon: Sparkles,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
+      color: 'text-amber-500',
+      bg: 'bg-amber-100/60',
     },
     {
       title: 'Structural Similarity (SSIM)',
       value: `${metrics.ssim}`,
       sub: 'Sub-nanometer Fidelity',
       icon: Activity,
-      color: 'text-cyan-600',
-      bg: 'bg-cyan-50',
+      color: 'text-[#80A8FF]',
+      bg: 'bg-[#D3D3FF]/50',
     },
     {
       title: 'Noise Reduction %',
@@ -40,15 +39,15 @@ export const QualityMetricsPanel: React.FC<QualityMetricsPanelProps> = ({ metric
       sub: 'Poisson Noise Removed',
       icon: TrendingUp,
       color: 'text-emerald-600',
-      bg: 'bg-emerald-50',
+      bg: 'bg-emerald-100/60',
     },
     {
       title: 'Restoration Confidence',
       value: `${metrics.restorationConfidence}%`,
       sub: 'Deep Neural Certitude',
       icon: ShieldCheck,
-      color: 'text-indigo-600',
-      bg: 'bg-indigo-50',
+      color: 'text-[#CEB5FF]',
+      bg: 'bg-[#CEB5FF]/30',
     },
     {
       title: 'Processing Time',
@@ -56,31 +55,31 @@ export const QualityMetricsPanel: React.FC<QualityMetricsPanelProps> = ({ metric
       sub: 'TensorRT FP16 Latency',
       icon: Clock,
       color: 'text-amber-600',
-      bg: 'bg-amber-50',
+      bg: 'bg-amber-100/50',
     },
     {
       title: 'GPU VRAM Allocation',
       value: `${metrics.gpuMemoryGb} GB`,
       sub: 'NVIDIA H100 SXM5',
       icon: Server,
-      color: 'text-purple-600',
-      bg: 'bg-purple-50',
+      color: 'text-[#80A8FF]',
+      bg: 'bg-[#D3D3FF]/40',
     },
     {
       title: 'Resolution Multiplier',
       value: `${metrics.resolutionScale} Super-Res`,
       sub: 'SwinIR Transformer',
       icon: ZoomIn,
-      color: 'text-pink-600',
-      bg: 'bg-pink-50',
+      color: 'text-[#8EC1DE]',
+      bg: 'bg-[#8EC1DE]/30',
     },
     {
       title: 'Inference Throughput',
       value: `${metrics.inferenceSpeedFps} FPS`,
       sub: '4096 x 4096 Resolution',
       icon: Zap,
-      color: 'text-blue-600',
-      bg: 'bg-blue-50',
+      color: 'text-amber-500',
+      bg: 'bg-amber-100/60',
     },
   ];
 
@@ -88,8 +87,10 @@ export const QualityMetricsPanel: React.FC<QualityMetricsPanelProps> = ({ metric
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-bold text-slate-900">Quantitative Image Quality Metrics</h3>
-          <p className="text-xs text-slate-500">
+          <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide">
+            Quantitative Image Quality Metrics
+          </h3>
+          <p className="text-xs text-slate-500 font-medium">
             Real-time metrology diagnostic scores calculated against ISO-12233 standards.
           </p>
         </div>
@@ -99,16 +100,16 @@ export const QualityMetricsPanel: React.FC<QualityMetricsPanelProps> = ({ metric
         {cards.map((card, idx) => {
           const Icon = card.icon;
           return (
-            <div key={idx} className="glass-panel rounded-2xl p-4 border border-slate-200 bg-white">
+            <div key={idx} className="moondust-glass rounded-2xl p-4 border border-[#CEB5FF]">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-slate-500">{card.title}</span>
-                <div className={`h-8 w-8 rounded-lg ${card.bg} ${card.color} flex items-center justify-center`}>
+                <span className="text-xs font-bold text-slate-600">{card.title}</span>
+                <div className={`h-8 w-8 rounded-xl ${card.bg} ${card.color} flex items-center justify-center border border-white/60 shadow-2xs`}>
                   <Icon className="h-4 w-4" />
                 </div>
               </div>
               <div className="mt-3">
-                <span className="text-xl font-extrabold text-slate-900">{card.value}</span>
-                <p className="text-[11px] font-semibold text-slate-400 mt-1">{card.sub}</p>
+                <span className="text-2xl font-black text-gold-glitter">{card.value}</span>
+                <p className="text-[11px] font-bold text-[#80A8FF] mt-1">{card.sub}</p>
               </div>
             </div>
           );

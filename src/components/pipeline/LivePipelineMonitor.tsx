@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { PipelineStage } from '../../types/semicon';
 import { INITIAL_PIPELINE_STAGES } from '../../services/mockBackendApi';
 import {
   Play,
   CheckCircle2,
-  Clock,
   Cpu,
   Terminal,
   Activity,
   Zap,
-  RotateCcw,
   Sparkles,
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 export const LivePipelineMonitor: React.FC = () => {
   const [stages, setStages] = useState<PipelineStage[]>(INITIAL_PIPELINE_STAGES);
@@ -70,17 +67,17 @@ export const LivePipelineMonitor: React.FC = () => {
   return (
     <div className="space-y-6 max-w-7xl mx-auto">
       {/* Top Banner & Control */}
-      <div className="glass-panel rounded-3xl p-6 border border-slate-200 bg-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
         <div>
           <div className="flex items-center gap-2">
-            <span className="rounded-md bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">
+            <span className="rounded-md badge-gold-glitter px-2 py-0.5 text-[10px] font-black uppercase">
               PYTORCH RESTORMER ENGINE
             </span>
-            <h2 className="font-poppins text-lg font-bold text-slate-900">
+            <h2 className="font-poppins text-lg font-black text-slate-900">
               Live AI Restoration Pipeline Monitor
             </h2>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-600 mt-1 font-medium">
             Real-time execution status for all 9 deep learning metrology stages.
           </p>
         </div>
@@ -89,10 +86,10 @@ export const LivePipelineMonitor: React.FC = () => {
           <button
             onClick={startPipeline}
             disabled={isRunning}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold text-white transition shadow-md ${
+            className={`flex items-center gap-2 px-6 py-3 rounded-xl text-xs font-extrabold text-white transition shadow-md ${
               isRunning
                 ? 'bg-slate-400 cursor-not-allowed'
-                : 'bg-blue-600 hover:bg-blue-700 shadow-blue-600/20'
+                : 'bg-gradient-to-r from-[#80A8FF] to-[#CEB5FF] hover:shadow-lg shadow-[#80A8FF]/25 border border-white/40'
             }`}
           >
             {isRunning ? <Cpu className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4 fill-white" />}
@@ -112,12 +109,12 @@ export const LivePipelineMonitor: React.FC = () => {
             return (
               <div
                 key={stg.id}
-                className={`glass-panel rounded-2xl p-4 border transition-all ${
+                className={`moondust-glass rounded-2xl p-4 border transition-all ${
                   isCurrent
-                    ? 'border-blue-500 bg-blue-50/50 ring-2 ring-blue-500/20 shadow-md'
+                    ? 'border-[#80A8FF] bg-[#D3D3FF]/40 ring-2 ring-[#80A8FF]/30 shadow-md'
                     : isCompleted
-                    ? 'border-emerald-200 bg-white'
-                    : 'border-slate-200 bg-white opacity-70'
+                    ? 'border-emerald-300 bg-white'
+                    : 'border-[#CEB5FF]/50 bg-white/70 opacity-80'
                 }`}
               >
                 <div className="flex items-start justify-between">
@@ -127,25 +124,25 @@ export const LivePipelineMonitor: React.FC = () => {
                         isCompleted
                           ? 'bg-emerald-500 text-white'
                           : isCurrent
-                          ? 'bg-blue-600 text-white animate-pulse'
-                          : 'bg-slate-100 text-slate-500'
+                          ? 'bg-gradient-to-r from-[#80A8FF] to-[#CEB5FF] text-white animate-pulse'
+                          : 'bg-[#D3D3FF]/50 text-slate-600'
                       }`}
                     >
                       {isCompleted ? <CheckCircle2 className="h-4 w-4" /> : index + 1}
                     </div>
                     <div>
                       <h4 className="text-xs font-bold text-slate-900">{stg.name}</h4>
-                      <p className="text-[11px] text-slate-500">{stg.description}</p>
+                      <p className="text-[11px] text-slate-500 font-medium">{stg.description}</p>
                     </div>
                   </div>
 
                   <span
-                    className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded-md ${
                       isCompleted
-                        ? 'bg-emerald-50 text-emerald-700'
+                        ? 'bg-emerald-100 text-emerald-800'
                         : isCurrent
-                        ? 'bg-blue-100 text-blue-800'
-                        : 'bg-slate-100 text-slate-600'
+                        ? 'bg-gold-glitter text-amber-900'
+                        : 'bg-[#D3D3FF]/50 text-slate-600'
                     }`}
                   >
                     {isCompleted ? 'Completed' : isCurrent ? 'Processing...' : 'Pending'}
@@ -153,10 +150,10 @@ export const LivePipelineMonitor: React.FC = () => {
                 </div>
 
                 {/* Progress Bar */}
-                <div className="mt-3 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div className="mt-3 h-1.5 w-full bg-[#D3D3FF]/40 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all duration-300 rounded-full ${
-                      isCompleted ? 'bg-emerald-500' : 'bg-blue-600'
+                      isCompleted ? 'bg-emerald-500' : 'bg-gradient-to-r from-[#80A8FF] to-[#CEB5FF]'
                     }`}
                     style={{ width: `${stg.progress}%` }}
                   />
@@ -168,31 +165,31 @@ export const LivePipelineMonitor: React.FC = () => {
 
         {/* Right 5 Cols: CUDA Console Stream */}
         <div className="lg:col-span-5">
-          <div className="glass-panel rounded-3xl p-5 border border-slate-800 bg-slate-950 text-white h-full flex flex-col justify-between">
+          <div className="moondust-glass-dark rounded-3xl p-5 border border-[#8EC1DE]/30 text-white h-full flex flex-col justify-between shadow-2xl">
             <div>
               <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
                 <div className="flex items-center gap-2">
-                  <Terminal className="h-4 w-4 text-cyan-400" />
-                  <h3 className="text-xs font-bold font-mono text-cyan-400">
+                  <Terminal className="h-4 w-4 text-[#8EC1DE]" />
+                  <h3 className="text-xs font-mono font-bold text-[#8EC1DE]">
                     PyTorch CUDA Tensor Console Log
                   </h3>
                 </div>
-                <span className="text-[10px] font-mono text-slate-500">FP16 TensorRT</span>
+                <span className="text-[10px] font-mono text-gold-glitter font-bold">FP16 TensorRT</span>
               </div>
 
-              <div className="space-y-2 font-mono text-[11px] text-slate-300 max-h-96 overflow-y-auto pr-2">
+              <div className="space-y-2 font-mono text-[11px] text-[#D3D3FF] max-h-96 overflow-y-auto pr-2">
                 {consoleLogs.map((log, i) => (
                   <div key={i} className="leading-normal">
-                    <span className="text-blue-400 font-semibold">{log.split(' ')[0]}</span>{' '}
+                    <span className="text-gold-glitter font-bold">{log.split(' ')[0]}</span>{' '}
                     <span>{log.substring(log.indexOf(' ') + 1)}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <div className="pt-3 border-t border-slate-800 text-[10px] font-mono text-slate-500 flex items-center justify-between">
+            <div className="pt-3 border-t border-slate-800 text-[10px] font-mono text-slate-400 flex items-center justify-between">
               <span>Status: {isRunning ? 'Streaming CUDA Kernels...' : 'Idle'}</span>
-              <span>Node: Fab-04-H100</span>
+              <span className="text-[#8EC1DE]">Node: Fab-04-H100</span>
             </div>
           </div>
         </div>

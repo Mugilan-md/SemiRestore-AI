@@ -8,10 +8,7 @@ import {
 import {
   ZoomIn,
   ZoomOut,
-  Maximize2,
-  Minimize2,
   Sliders,
-  Eye,
   Layers,
   Crosshair,
   Sparkles,
@@ -123,23 +120,23 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Workspace Control Bar */}
-      <div className="glass-panel rounded-2xl p-4 border border-slate-200 bg-white flex flex-wrap items-center justify-between gap-4">
+      {/* Workspace Control Bar with Moon Dust styling */}
+      <div className="moondust-glass rounded-3xl p-5 border border-[#CEB5FF] flex flex-wrap items-center justify-between gap-4 shadow-sm">
         {/* Left: Sample Title & Lot info */}
         <div>
           <div className="flex items-center gap-2">
-            <span className="rounded-md bg-blue-100 px-2 py-0.5 text-[10px] font-bold text-blue-700">
+            <span className="rounded-md bg-[#D3D3FF] px-2.5 py-0.5 text-[10px] font-black text-[#80A8FF]">
               {sample.category}
             </span>
-            <h2 className="text-sm font-bold text-slate-900">{sample.title}</h2>
+            <h2 className="text-sm font-extrabold text-slate-900">{sample.title}</h2>
           </div>
-          <p className="text-[11px] text-slate-500 mt-0.5">
-            Lot: {sample.waferLot} • {sample.foundry} • Resolution: {sample.resolution}
+          <p className="text-[11px] text-slate-500 font-medium mt-0.5">
+            Lot: <span className="text-slate-800 font-bold">{sample.waferLot}</span> • {sample.foundry} • Resolution: {sample.resolution}
           </p>
         </div>
 
         {/* Center: Layout Switcher */}
-        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+        <div className="flex items-center gap-1 bg-[#D3D3FF]/40 p-1 rounded-2xl border border-[#CEB5FF]/50">
           {[
             { id: 'triple' as ComparisonLayout, label: 'Triple View', icon: Grid },
             { id: 'slider' as ComparisonLayout, label: 'Before/After Slider', icon: Sliders },
@@ -148,9 +145,9 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
             <button
               key={mode.id}
               onClick={() => setLayout(mode.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                 layout === mode.id
-                  ? 'bg-white text-blue-600 shadow-2xs'
+                  ? 'bg-white text-[#80A8FF] shadow-2xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -163,18 +160,18 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
         {/* Right: Micro Zoom, Reset, Defect Overlay Toggle & Report */}
         <div className="flex items-center gap-2">
           {/* Zoom controls */}
-          <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+          <div className="flex items-center gap-1 bg-[#D3D3FF]/40 p-1 rounded-2xl border border-[#CEB5FF]/50 text-xs font-bold">
             <button
               onClick={() => setZoomLevel((z) => Math.max(0.5, z - 0.25))}
-              className="p-1 rounded-md hover:bg-white text-slate-700"
+              className="p-1 rounded-lg hover:bg-white text-slate-700"
               title="Zoom Out"
             >
               <ZoomOut className="h-3.5 w-3.5" />
             </button>
-            <span className="px-2 text-[11px] font-mono">{Math.round(zoomLevel * 100)}%</span>
+            <span className="px-2 text-[11px] font-mono text-slate-900 font-bold">{Math.round(zoomLevel * 100)}%</span>
             <button
               onClick={() => setZoomLevel((z) => Math.min(4, z + 0.25))}
-              className="p-1 rounded-md hover:bg-white text-slate-700"
+              className="p-1 rounded-lg hover:bg-white text-slate-700"
               title="Zoom In"
             >
               <ZoomIn className="h-3.5 w-3.5" />
@@ -184,7 +181,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
                 setZoomLevel(1);
                 setPanPos({ x: 0, y: 0 });
               }}
-              className="p-1 rounded-md hover:bg-white text-slate-700"
+              className="p-1 rounded-lg hover:bg-white text-slate-700"
               title="Reset Zoom"
             >
               <RotateCcw className="h-3.5 w-3.5" />
@@ -194,10 +191,10 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
           {/* AI Defect Bounding Boxes Toggle */}
           <button
             onClick={() => setShowDefects(!showDefects)}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border transition ${
               showDefects
-                ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                ? 'bg-gradient-to-r from-[#80A8FF] to-[#CEB5FF] text-white border-transparent shadow-xs'
+                : 'bg-white text-slate-700 border-[#CEB5FF] hover:bg-[#D3D3FF]/30'
             }`}
           >
             <ShieldCheck className="h-3.5 w-3.5" />
@@ -207,7 +204,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
           {/* Generate Inspection Certificate */}
           <button
             onClick={onGenerateReport}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white hover:bg-emerald-700 shadow-sm transition"
           >
             <FileCheck2 className="h-3.5 w-3.5" />
             <span>Generate Report</span>
@@ -221,13 +218,13 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
         {layout === 'triple' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Viewer 1: Original Scan */}
-            <div className="glass-panel rounded-3xl p-4 border border-slate-200 bg-slate-900 text-white relative overflow-hidden flex flex-col items-center">
-              <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-semibold">
-                <span className="text-slate-400">Ground Truth Reference</span>
-                <span className="text-cyan-400 font-mono">16-bit SEM</span>
+            <div className="moondust-glass-dark rounded-3xl p-4 border border-[#8EC1DE]/40 text-white relative overflow-hidden flex flex-col items-center">
+              <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-bold">
+                <span className="text-[#D3D3FF]">Ground Truth Reference</span>
+                <span className="text-gold-glitter font-mono">16-bit SEM</span>
               </div>
               <div
-                className="relative w-full h-[320px] rounded-2xl overflow-hidden bg-slate-950 cursor-grab active:cursor-grabbing flex items-center justify-center"
+                className="relative w-full h-[320px] rounded-2xl overflow-hidden bg-slate-950 cursor-grab active:cursor-grabbing flex items-center justify-center border border-slate-800"
                 onMouseDown={handleMouseDown}
                 onMouseMove={(e) => handleMouseMove(e, e.currentTarget)}
                 onMouseUp={handleMouseUp}
@@ -243,13 +240,13 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
             </div>
 
             {/* Viewer 2: Degraded / Noisy Scan */}
-            <div className="glass-panel rounded-3xl p-4 border border-amber-200/60 bg-slate-900 text-white relative overflow-hidden flex flex-col items-center">
-              <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-semibold">
-                <span className="text-amber-400">Degraded Input (Noise)</span>
-                <span className="text-amber-400 font-mono">PSNR 24.2 dB</span>
+            <div className="moondust-glass-dark rounded-3xl p-4 border border-amber-400/40 text-white relative overflow-hidden flex flex-col items-center">
+              <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-bold">
+                <span className="text-amber-300">Degraded Input (Noise)</span>
+                <span className="text-gold-glitter font-mono">PSNR 24.2 dB</span>
               </div>
               <div
-                className="relative w-full h-[320px] rounded-2xl overflow-hidden bg-slate-950 cursor-grab active:cursor-grabbing flex items-center justify-center"
+                className="relative w-full h-[320px] rounded-2xl overflow-hidden bg-slate-950 cursor-grab active:cursor-grabbing flex items-center justify-center border border-slate-800"
                 onMouseDown={handleMouseDown}
                 onMouseMove={(e) => handleMouseMove(e, e.currentTarget)}
                 onMouseUp={handleMouseUp}
@@ -264,16 +261,18 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
               </div>
             </div>
 
-            {/* Viewer 3: Restormer AI Output */}
-            <div className="glass-panel rounded-3xl p-4 border border-blue-400/80 bg-slate-900 text-white relative overflow-hidden flex flex-col items-center ring-2 ring-blue-500/30">
-              <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-semibold">
-                <span className="text-blue-400 flex items-center gap-1">
-                  <Sparkles className="h-3.5 w-3.5" /> Restormer AI Output
+            {/* Viewer 3: Restormer AI Output with Pure Gold Score */}
+            <div className="moondust-glass-dark rounded-3xl p-4 border-2 border-[#80A8FF]/80 text-white relative overflow-hidden flex flex-col items-center ring-2 ring-[#CEB5FF]/30">
+              <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-bold">
+                <span className="text-gold-glitter flex items-center gap-1.5 font-extrabold">
+                  <Sparkles className="h-3.5 w-3.5 text-amber-400" /> Restormer AI Output
                 </span>
-                <span className="text-emerald-400 font-mono">PSNR {sample.metrics.psnr} dB</span>
+                <span className="text-gold-glitter font-mono text-sm font-black">
+                  PSNR {sample.metrics.psnr} dB
+                </span>
               </div>
               <div
-                className="relative w-full h-[320px] rounded-2xl overflow-hidden bg-slate-950 cursor-grab active:cursor-grabbing flex items-center justify-center"
+                className="relative w-full h-[320px] rounded-2xl overflow-hidden bg-slate-950 cursor-grab active:cursor-grabbing flex items-center justify-center border border-slate-800"
                 onMouseDown={handleMouseDown}
                 onMouseMove={(e) => handleMouseMove(e, e.currentTarget)}
                 onMouseUp={handleMouseUp}
@@ -291,7 +290,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
                   sample.defects.map((def) => (
                     <div
                       key={def.id}
-                      className="absolute border-2 border-rose-500 bg-rose-500/20 rounded-md pointer-events-none flex flex-col justify-between p-1"
+                      className="absolute border-2 border-rose-500 bg-rose-500/20 rounded-md pointer-events-none flex flex-col justify-between p-1 shadow-lg"
                       style={{
                         left: `${def.bbox.x}%`,
                         top: `${def.bbox.y}%`,
@@ -299,7 +298,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
                         height: `${def.bbox.height}%`,
                       }}
                     >
-                      <span className="text-[9px] font-bold text-white bg-rose-600 px-1 rounded">
+                      <span className="text-[9px] font-black text-white bg-rose-600 px-1 rounded shadow-xs">
                         {def.label} ({Math.round(def.confidence * 100)}%)
                       </span>
                     </div>
@@ -311,13 +310,13 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
 
         {/* Before/After Interactive Slider Mode */}
         {layout === 'slider' && (
-          <div className="glass-panel rounded-3xl p-6 border border-slate-200 bg-slate-900 text-white relative">
-            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-xs font-semibold">
-              <span className="text-amber-400">Left: Degraded Noisy Scan</span>
-              <span className="text-blue-400">Right: Restormer Restored Output</span>
+          <div className="moondust-glass-dark rounded-3xl p-6 border border-[#CEB5FF] text-white relative">
+            <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-xs font-bold">
+              <span className="text-amber-300">Left: Degraded Noisy Scan</span>
+              <span className="text-gold-glitter font-black">Right: Restormer Restored Output</span>
             </div>
 
-            <div className="relative w-full h-[400px] rounded-2xl overflow-hidden bg-slate-950 select-none">
+            <div className="relative w-full h-[400px] rounded-2xl overflow-hidden bg-slate-950 select-none border border-slate-800">
               {/* Restored background canvas */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <canvas ref={restoredCanvasRef} className="max-w-full max-h-full" />
@@ -335,10 +334,10 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
 
               {/* Slider Divider Bar */}
               <div
-                className="absolute top-0 bottom-0 w-0.5 bg-blue-500 shadow-[0_0_10px_#0F62FE] z-20 pointer-events-none"
+                className="absolute top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#80A8FF] via-[#CEB5FF] to-[#8EC1DE] shadow-[0_0_12px_#80A8FF] z-20 pointer-events-none"
                 style={{ left: `${sliderPos}%` }}
               >
-                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-8 w-8 rounded-full bg-blue-600 text-white border-2 border-white shadow-lg flex items-center justify-center text-xs font-bold">
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-8 w-8 rounded-full bg-slate-900 text-gold-glitter border-2 border-white shadow-lg flex items-center justify-center text-xs font-black">
                   ↔
                 </div>
               </div>
@@ -349,15 +348,15 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
         {/* Split Screen Mode */}
         {layout === 'split' && (
           <div className="grid grid-cols-2 gap-4">
-            <div className="glass-panel rounded-3xl p-4 bg-slate-900 border border-slate-800 text-white">
-              <div className="text-xs font-semibold text-amber-400 mb-2">Noisy SEM Scan</div>
-              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl">
+            <div className="moondust-glass-dark rounded-3xl p-4 border border-slate-800 text-white">
+              <div className="text-xs font-bold text-amber-300 mb-2">Noisy SEM Scan</div>
+              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl border border-slate-800">
                 <canvas ref={noisyCanvasRef} className="max-w-full max-h-full" />
               </div>
             </div>
-            <div className="glass-panel rounded-3xl p-4 bg-slate-900 border border-blue-900 text-white">
-              <div className="text-xs font-semibold text-blue-400 mb-2">Restormer AI Restored</div>
-              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl">
+            <div className="moondust-glass-dark rounded-3xl p-4 border border-[#80A8FF] text-white">
+              <div className="text-xs font-black text-gold-glitter mb-2">Restormer AI Restored</div>
+              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl border border-slate-800">
                 <canvas ref={restoredCanvasRef} className="max-w-full max-h-full" />
               </div>
             </div>
@@ -365,10 +364,10 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
         )}
       </div>
 
-      {/* Crosshair Pixel Inspector Panel */}
-      <div className="glass-panel rounded-2xl p-4 border border-slate-200 bg-white flex flex-wrap items-center justify-between text-xs text-slate-700">
+      {/* Crosshair Pixel Inspector Panel with Pure Gold readout values */}
+      <div className="moondust-glass rounded-2xl p-4 border border-[#CEB5FF] flex flex-wrap items-center justify-between text-xs text-slate-700 shadow-sm">
         <div className="flex items-center gap-3 font-mono">
-          <Crosshair className="h-4 w-4 text-blue-600" />
+          <Crosshair className="h-4 w-4 text-[#80A8FF]" />
           <span>
             Coordinates: X=<span className="font-bold text-slate-900">{crosshairPos.x}</span> nm, Y=<span className="font-bold text-slate-900">{crosshairPos.y}</span> nm
           </span>
@@ -379,10 +378,10 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
             RGB: <span className="font-bold text-slate-900">{pixelInfo.r}, {pixelInfo.g}, {pixelInfo.b}</span>
           </span>
           <span>
-            Estimated Local SNR: <span className="font-bold text-blue-600">{pixelInfo.snr} dB</span>
+            Estimated Local SNR: <span className="font-black text-gold-glitter">{pixelInfo.snr} dB</span>
           </span>
           <span>
-            Scale: <span className="font-bold text-emerald-600">0.2 nm/pixel</span>
+            Scale: <span className="font-bold text-[#80A8FF]">0.2 nm/pixel</span>
           </span>
         </div>
       </div>

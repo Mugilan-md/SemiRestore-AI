@@ -7,7 +7,7 @@ import {
   addSyntheticSemNoise,
   applyRestormerAI,
 } from '../../services/imageProcessingEngine';
-import { Layers, Eye, Activity, Sparkles, Sliders } from 'lucide-react';
+import { Activity } from 'lucide-react';
 
 interface HeatmapViewerProps {
   sample: WaferSample;
@@ -74,26 +74,27 @@ export const HeatmapViewer: React.FC<HeatmapViewerProps> = ({
   ];
 
   return (
-    <div className="glass-panel rounded-3xl p-6 border border-slate-200 bg-white space-y-4">
+    <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <Activity className="h-4 w-4 text-blue-600" /> Spectral & Heatmap Diagnostic Layer
+          <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
+            <Activity className="h-4 w-4 text-[#80A8FF]" />
+            <span>Spectral & Heatmap Diagnostic Layer</span>
           </h3>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-500 font-medium">
             Switch layer masks to inspect high-frequency noise error and transformer attention weights.
           </p>
         </div>
 
         {/* View Mode Pills */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1.5 rounded-2xl">
+        <div className="flex flex-wrap items-center gap-1.5 bg-[#D3D3FF]/40 p-1.5 rounded-2xl border border-[#CEB5FF]/50">
           {viewButtons.map((btn) => (
             <button
               key={btn.mode}
               onClick={() => setViewMode(btn.mode)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition ${
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition ${
                 viewMode === btn.mode
-                  ? 'bg-blue-600 text-white shadow-xs'
+                  ? 'bg-gradient-to-r from-[#80A8FF] to-[#CEB5FF] text-white shadow-xs'
                   : 'text-slate-700 hover:bg-white hover:text-slate-900'
               }`}
             >
@@ -103,8 +104,8 @@ export const HeatmapViewer: React.FC<HeatmapViewerProps> = ({
         </div>
       </div>
 
-      {/* Main Display Canvas */}
-      <div className="relative w-full h-[400px] rounded-2xl bg-slate-950 overflow-hidden flex items-center justify-center border border-slate-800">
+      {/* Main Display Canvas with Moon Dust Frame */}
+      <div className="relative w-full h-[400px] rounded-2xl bg-slate-950 overflow-hidden flex items-center justify-center border border-[#8EC1DE]/40 shadow-inner">
         {/* Hidden source canvases */}
         <canvas ref={sourceCanvasRef} className="hidden" />
         <canvas ref={degradedCanvasRef} className="hidden" />
@@ -115,10 +116,10 @@ export const HeatmapViewer: React.FC<HeatmapViewerProps> = ({
 
         {/* JET Heatmap Color Legend */}
         {viewMode === 'heatmap' && (
-          <div className="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur-md p-3 rounded-xl border border-slate-700 flex items-center gap-3 text-[11px] text-white font-mono">
-            <span>Low Error (0.0)</span>
+          <div className="absolute bottom-4 left-4 moondust-glass-dark p-3 rounded-xl border border-slate-700 flex items-center gap-3 text-[11px] text-white font-mono shadow-xl">
+            <span className="text-[#D3D3FF] font-bold">Low Error (0.0)</span>
             <div className="h-3 w-32 rounded bg-gradient-to-r from-blue-600 via-cyan-400 via-yellow-400 to-red-600" />
-            <span>High Variance (1.0)</span>
+            <span className="text-gold-glitter font-black">High Variance (1.0)</span>
           </div>
         )}
       </div>
