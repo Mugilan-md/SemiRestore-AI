@@ -110,8 +110,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
               <span className="text-gold-glitter font-black tracking-wide">Next-Gen Semiconductor Inspection Standard 2026</span>
             </div>
 
-            {/* Main Headline with Pure Real 24K Gold Glittering Text */}
-            <h1 className="font-poppins text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.12]">
+            {/* Main Headline with Royal Cinzel & Pure Real 24K Gold Glittering Text */}
+            <h1 className="font-cinzel text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.12]">
               <span className="block text-slate-900">AI-Based Restoration</span>
               <span className="block text-slate-900 text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-800">for</span>
               <span className="text-gold-glitter-lg block mt-1">Semiconductor Inspection</span>
@@ -261,7 +261,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
       <section id="features-section" className="py-20 moondust-glass border-y border-[#CEB5FF]/70 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto rounded-3xl my-6 shadow-md">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="text-xs font-black uppercase tracking-widest text-gold-glitter">Platform Capabilities</h2>
-          <p className="font-poppins text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
+          <p className="font-cinzel text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2">
             Engineering Precision for Fab Metrology
           </p>
           <p className="text-sm text-slate-600 mt-3 font-medium">
@@ -303,7 +303,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <h2 className="text-xs font-black uppercase tracking-widest text-gold-glitter">Inspection Workflow</h2>
-          <p className="font-poppins text-3xl font-extrabold text-slate-900 mt-2">
+          <p className="font-cinzel text-3xl font-extrabold text-slate-900 mt-2">
             4-Step Automated AI Pipeline
           </p>
         </div>
@@ -314,7 +314,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
             return (
               <div key={idx} className="relative moondust-glass rounded-2xl p-6 border border-[#CEB5FF]">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-black text-gold-glitter font-poppins">{w.step}</span>
+                  <span className="text-2xl font-black text-gold-glitter font-cinzel">{w.step}</span>
                   <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-[#80A8FF] to-[#CEB5FF] text-white flex items-center justify-center shadow-md shadow-[#80A8FF]/20">
                     <Icon className="h-5 w-5" />
                   </div>
@@ -332,7 +332,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
         <div className="absolute inset-0 bg-moondust-dots opacity-20" />
         <div className="relative z-10 text-center max-w-3xl mx-auto mb-16">
           <span className="text-xs font-black uppercase tracking-widest text-gold-glitter">System Architecture</span>
-          <h2 className="font-poppins text-3xl sm:text-4xl font-extrabold text-white mt-2">
+          <h2 className="font-cinzel text-3xl sm:text-4xl font-extrabold text-white mt-2">
             Built on PyTorch Restormer & TensorRT Engine
           </h2>
           <p className="text-xs sm:text-sm text-[#D3D3FF] mt-3 font-medium">

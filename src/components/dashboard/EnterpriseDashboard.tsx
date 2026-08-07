@@ -59,10 +59,10 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
       {/* Top Header & Overview */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="font-poppins text-2xl sm:text-3xl font-black text-slate-900">
+          <h1 className="font-cinzel text-2xl sm:text-3xl font-black text-slate-900">
             Fab Metrology & Restormer AI Control Center
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium">
+          <p className="text-xs sm:text-sm text-slate-600 mt-1 font-medium font-royal-sans">
             Real-time semiconductor image inspection, GPU throughput, and yield statistics.
           </p>
         </div>

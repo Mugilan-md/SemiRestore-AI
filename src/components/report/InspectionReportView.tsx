@@ -57,10 +57,10 @@ export const InspectionReportView: React.FC<InspectionReportViewProps> = ({ samp
               <Cpu className="h-7 w-7" />
             </div>
             <div>
-              <h1 className="font-poppins text-xl font-black text-slate-900 tracking-tight">
+              <h1 className="font-cinzel text-xl font-black text-slate-900 tracking-tight">
                 SemiRestore<span className="text-gold-glitter">.AI</span>
               </h1>
-              <p className="text-xs font-black text-slate-500 uppercase tracking-widest">
+              <p className="text-xs font-black text-slate-500 uppercase tracking-widest font-cinzel">
                 Semiconductor Image Metrology & Yield Certificate
               </p>
             </div>

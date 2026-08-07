@@ -9,7 +9,7 @@
     --moondust-4: #80A8FF; /* Vibrant Periwinkle Accent */
     
     /* Real Pure 24K Gold Metallic Tokens */
-    --gold-base: #B38728;
+    --gold-base: #BF953F;
     --gold-light: #FFF6C7;
     --gold-dark: #7A5310;
     --gold-shimmer: #FFD700;
@@ -18,15 +18,46 @@
   body {
     background-color: #F6F7FF;
     color: #1E2238;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-family: 'Outfit', 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
     margin: 0;
     padding: 0;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Poppins', 'Inter', sans-serif;
+    font-family: 'Cinzel', 'Outfit', 'Poppins', sans-serif;
+    letter-spacing: -0.015em;
   }
+}
+
+/* ==========================================================================
+   ROYAL PRESTIGE TYPOGRAPHY UTILITIES
+   ========================================================================== */
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-royal-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-royal-sans {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-royal-syne {
+  font-family: 'Syne', sans-serif;
+}
+
+/* ==========================================================================
+   SOLID BLACK & ROYAL GOLD NAVBAR STYLES
+   ========================================================================== */
+
+.navbar-solid-black {
+  background: #090A10;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.95), 0 0 25px rgba(179, 135, 40, 0.15);
 }
 
 /* ==========================================================================
@@ -59,38 +90,38 @@
 
 /* Moon Dust Glassmorphism Panels */
 .moondust-glass {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(206, 181, 255, 0.6);
-  box-shadow: 0 12px 36px -10px rgba(128, 168, 255, 0.14), 0 4px 14px -2px rgba(206, 181, 255, 0.08);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(206, 181, 255, 0.65);
+  box-shadow: 0 14px 40px -10px rgba(128, 168, 255, 0.16), 0 4px 16px -2px rgba(206, 181, 255, 0.1);
 }
 
 .moondust-glass-dark {
-  background: rgba(22, 26, 48, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(142, 193, 222, 0.35);
-  box-shadow: 0 20px 50px -12px rgba(15, 20, 48, 0.5), inset 0 1px 0 rgba(211, 211, 255, 0.2);
+  background: rgba(13, 16, 32, 0.94);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(142, 193, 222, 0.4);
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(211, 211, 255, 0.25);
 }
 
 .moondust-glass-interactive {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(206, 181, 255, 0.55);
-  box-shadow: 0 10px 30px -10px rgba(128, 168, 255, 0.1), 0 4px 12px -2px rgba(142, 193, 222, 0.06);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(206, 181, 255, 0.6);
+  box-shadow: 0 10px 30px -10px rgba(128, 168, 255, 0.12), 0 4px 12px -2px rgba(142, 193, 222, 0.08);
   transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .moondust-glass-interactive:hover {
-  border-color: rgba(128, 168, 255, 0.9);
-  box-shadow: 0 22px 45px -12px rgba(128, 168, 255, 0.3), 0 8px 24px -4px rgba(206, 181, 255, 0.22);
+  border-color: rgba(128, 168, 255, 0.95);
+  box-shadow: 0 24px 50px -12px rgba(128, 168, 255, 0.32), 0 8px 26px -4px rgba(206, 181, 255, 0.25);
   transform: translateY(-3px);
 }
 
 /* ==========================================================================
-   PURE REAL 24K GOLD WITH GLITTERING & SHIMMERING EFFECTS (IMPORTANT TEXT ALONE)
+   PURE REAL 24K GOLD WITH SPARKLING & GLITTERING EFFECTS
    ========================================================================== */
 
 /* Shimmering metallic beam sweep */
@@ -104,6 +135,38 @@
   100% {
     background-position: 0% 50%;
   }
+}
+
+/* Sparkling twinkling glints */
+@keyframes goldSparkleGlint {
+  0%, 100% {
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.4)) drop-shadow(0 0 8px rgba(212, 175, 55, 0.25));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px rgba(255, 245, 183, 0.95)) drop-shadow(0 0 18px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 28px rgba(191, 149, 63, 0.5));
+  }
+}
+
+/* Navbar Brand Sparkling 24K Gold Text Effect */
+.text-navbar-gold-sparkle {
+  background: linear-gradient(
+    110deg,
+    #BF953F 0%,
+    #FFF8D6 18%,
+    #AA771C 35%,
+    #FFFFFF 50%,
+    #FFD700 65%,
+    #7A5310 82%,
+    #FFF4B8 92%,
+    #BF953F 100%
+  );
+  background-size: 260% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: realGoldGlitter 3.8s linear infinite, goldSparkleGlint 2.5s ease-in-out infinite;
+  display: inline-block;
+  font-weight: 900;
+  letter-spacing: 0.02em;
 }
 
 /* Standard Pure Golden Glitter Text for important figures, metrics & key labels */
@@ -155,24 +218,24 @@
 .badge-gold-glitter {
   background: linear-gradient(
     135deg,
-    rgba(255, 246, 199, 0.75) 0%,
-    rgba(255, 215, 0, 0.35) 40%,
-    rgba(191, 149, 63, 0.45) 75%,
-    rgba(140, 90, 16, 0.25) 100%
+    rgba(255, 246, 199, 0.95) 0%,
+    rgba(255, 215, 0, 0.45) 40%,
+    rgba(191, 149, 63, 0.55) 75%,
+    rgba(140, 90, 16, 0.35) 100%
   );
-  border: 1px solid rgba(179, 135, 40, 0.85);
+  border: 1px solid rgba(212, 175, 55, 0.95);
   box-shadow: 
-    0 0 14px rgba(255, 215, 0, 0.35),
-    inset 0 0 8px rgba(255, 246, 199, 0.6);
-  color: #693D04;
-  font-weight: 800;
+    0 0 16px rgba(255, 215, 0, 0.45),
+    inset 0 0 8px rgba(255, 246, 199, 0.8);
+  color: #5C3802;
+  font-weight: 900;
 }
 
-/* Moon Dust Vibrant Gradients for Secondary Accents */
-.text-moondust-brand {
-  background: linear-gradient(135deg, #80A8FF 0%, #CEB5FF 50%, #8EC1DE 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+/* Navbar active sliding gold pill */
+.navbar-active-gold-pill {
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.22) 0%, rgba(255, 215, 0, 0.12) 100%);
+  border: 1px solid rgba(212, 175, 55, 0.75);
+  box-shadow: 0 0 18px rgba(212, 175, 55, 0.35), inset 0 0 12px rgba(255, 244, 208, 0.15);
 }
 
 /* Custom Scrollbars */
