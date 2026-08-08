@@ -218,7 +218,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
         {layout === 'triple' && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Viewer 1: Original Scan */}
-            <div className="moondust-glass-dark rounded-3xl p-4 border border-[#8EC1DE]/40 text-white relative overflow-hidden flex flex-col items-center">
+            <div className="moondust-glass-dark rounded-3xl p-4 border border-[#8EC1DE]/40 text-white relative overflow-hidden flex flex-col items-center card-3d-dark-tactile cursor-pointer">
               <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-bold">
                 <span className="text-[#D3D3FF]">Ground Truth Reference</span>
                 <span className="text-gold-glitter font-mono">16-bit SEM</span>
@@ -240,7 +240,7 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
             </div>
 
             {/* Viewer 2: Degraded / Noisy Scan */}
-            <div className="moondust-glass-dark rounded-3xl p-4 border border-amber-400/40 text-white relative overflow-hidden flex flex-col items-center">
+            <div className="moondust-glass-dark rounded-3xl p-4 border border-amber-400/40 text-white relative overflow-hidden flex flex-col items-center card-3d-dark-tactile cursor-pointer">
               <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-bold">
                 <span className="text-amber-300">Degraded Input (Noise)</span>
                 <span className="text-gold-glitter font-mono">PSNR 24.2 dB</span>
@@ -261,8 +261,9 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
               </div>
             </div>
 
-            {/* Viewer 3: Restormer AI Output with Pure Gold Score */}
-            <div className="moondust-glass-dark rounded-3xl p-4 border-2 border-[#80A8FF]/80 text-white relative overflow-hidden flex flex-col items-center ring-2 ring-[#CEB5FF]/30">
+            {/* Viewer 3: Restormer AI Output with 3D Tactile Depth & Laser Scan */}
+            <div className="moondust-glass-dark rounded-3xl p-4 border-2 border-[#80A8FF]/80 text-white relative overflow-hidden flex flex-col items-center ring-2 ring-[#CEB5FF]/30 card-3d-dark-tactile cursor-pointer">
+              <div className="laser-scan-line" />
               <div className="w-full flex items-center justify-between pb-2 mb-2 border-b border-slate-800 text-xs font-bold">
                 <span className="text-gold-glitter flex items-center gap-1.5 font-extrabold">
                   <Sparkles className="h-3.5 w-3.5 text-amber-400" /> Restormer AI Output

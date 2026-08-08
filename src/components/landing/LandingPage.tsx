@@ -272,13 +272,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feat, index) => {
             const Icon = feat.icon;
-            const isImportant = index === 0 || index === 1; // Top primary modules have important hover
             return (
               <div
                 key={index}
-                className={`moondust-glass rounded-2xl p-6 flex flex-col justify-between ${
-                  isImportant ? 'card-important-hover cursor-pointer' : ''
-                }`}
+                className="moondust-glass rounded-2xl p-6 flex flex-col justify-between card-3d-tactile cursor-pointer"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -301,7 +298,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* How It Works Section with 3D Step Cards */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-2xl mx-auto mb-14">
           <h2 className="text-xs font-black uppercase tracking-widest text-gold-glitter">Inspection Workflow</h2>
@@ -314,7 +311,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
           {workflow.map((w, idx) => {
             const Icon = w.icon;
             return (
-              <div key={idx} className="relative moondust-glass rounded-2xl p-6 border border-[#CEB5FF]">
+              <div key={idx} className="relative moondust-glass rounded-2xl p-6 border border-[#CEB5FF] card-3d-tactile cursor-pointer">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-2xl font-black text-gold-glitter font-cinzel">{w.step}</span>
                   <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-[#80A8FF] to-[#CEB5FF] text-white flex items-center justify-center shadow-md shadow-[#80A8FF]/20">
@@ -329,7 +326,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
         </div>
       </section>
 
-      {/* Technology Section styled with Moon Dust Cosmic Tone */}
+      {/* Technology Section styled with Moon Dust Cosmic Tone & 3D Dark Cards */}
       <section id="technology-section" className="py-20 moondust-glass-dark text-white px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto rounded-3xl my-10 shadow-2xl relative overflow-hidden">
         <div className="absolute inset-0 bg-moondust-dots opacity-20" />
         <div className="relative z-10 text-center max-w-3xl mx-auto mb-16">
@@ -342,10 +339,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
           </p>
         </div>
 
-        {/* Architecture Node Diagram with Pure Gold Highlights */}
+        {/* Architecture Node Diagram with 3D Depth & Pure Gold Highlights */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Frontend */}
-          <div className="rounded-2xl border border-[#8EC1DE]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl">
+          <div className="rounded-2xl border border-[#8EC1DE]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl card-3d-dark-tactile cursor-pointer">
             <div className="flex items-center gap-3 mb-4 text-[#8EC1DE]">
               <Server className="h-5 w-5" />
               <h3 className="text-sm font-bold text-white">Client & Visualization Tier</h3>
@@ -359,7 +356,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
           </div>
 
           {/* Backend API */}
-          <div className="rounded-2xl border border-[#CEB5FF]/50 bg-slate-900/90 p-6 backdrop-blur-md ring-2 ring-[#CEB5FF]/30 shadow-xl">
+          <div className="rounded-2xl border border-[#CEB5FF]/50 bg-slate-900/90 p-6 backdrop-blur-md ring-2 ring-[#CEB5FF]/30 shadow-xl card-3d-dark-tactile cursor-pointer">
             <div className="flex items-center gap-3 mb-4 text-[#CEB5FF]">
               <Cpu className="h-5 w-5" />
               <h3 className="text-sm font-bold text-white">FastAPI & Inference Core</h3>
@@ -373,7 +370,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
           </div>
 
           {/* AI Models */}
-          <div className="rounded-2xl border border-[#80A8FF]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl">
+          <div className="rounded-2xl border border-[#80A8FF]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl card-3d-dark-tactile cursor-pointer">
             <div className="flex items-center gap-3 mb-4 text-[#80A8FF]">
               <Layers className="h-5 w-5" />
               <h3 className="text-sm font-bold text-white">Deep AI Models</h3>

@@ -14,10 +14,10 @@ export const SettingsModal: React.FC = () => {
   };
 
   return (
-    <div className="moondust-glass rounded-3xl p-6 sm:p-8 border border-[#CEB5FF] max-w-3xl mx-auto space-y-6 shadow-md">
+    <div className="moondust-glass rounded-3xl p-6 sm:p-8 border border-[#CEB5FF] max-w-3xl mx-auto space-y-6 shadow-md card-3d-tactile">
       <div className="flex items-center justify-between border-b border-[#D3D3FF]/60 pb-4">
         <div>
-          <h2 className="font-poppins text-lg font-black text-slate-900 flex items-center gap-2">
+          <h2 className="font-cinzel text-lg font-black text-slate-900 flex items-center gap-2">
             <Settings className="h-5 w-5 text-[#80A8FF]" />
             <span>Restormer AI Model & Fab Settings</span>
           </h2>
@@ -57,7 +57,7 @@ export const SettingsModal: React.FC = () => {
             <div
               key={mode.id}
               onClick={() => setConfig({ ...config, accuracyLevel: mode.id })}
-              className={`p-4 rounded-2xl border cursor-pointer transition ${
+              className={`p-4 rounded-2xl border cursor-pointer transition card-3d-tactile ${
                 config.accuracyLevel === mode.id
                   ? 'border-[#80A8FF] bg-[#D3D3FF]/50 ring-2 ring-[#80A8FF]/30 shadow-xs'
                   : 'border-[#CEB5FF]/60 bg-white/80 hover:bg-[#D3D3FF]/20'

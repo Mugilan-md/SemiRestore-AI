@@ -24,10 +24,10 @@ export const RecentHistoryTable: React.FC<RecentHistoryTableProps> = ({ onSelect
   );
 
   return (
-    <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] space-y-6 max-w-7xl mx-auto shadow-md">
+    <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] space-y-6 max-w-7xl mx-auto shadow-md card-3d-tactile">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="font-poppins text-lg font-black text-slate-900">
+          <h2 className="font-cinzel text-lg font-black text-slate-900">
             Wafer Cassette Inspection Logs & History
           </h2>
           <p className="text-xs text-slate-500 font-medium">
@@ -48,7 +48,7 @@ export const RecentHistoryTable: React.FC<RecentHistoryTableProps> = ({ onSelect
         </div>
       </div>
 
-      {/* Table with Pure Gold Numbers */}
+      {/* Table with Pure Gold Numbers and 3D Rows */}
       <div className="overflow-x-auto">
         <table className="w-full text-left text-xs text-slate-700">
           <thead className="bg-[#D3D3FF]/40 text-[11px] font-black text-slate-600 uppercase tracking-wider border-y border-[#CEB5FF]">
@@ -64,7 +64,7 @@ export const RecentHistoryTable: React.FC<RecentHistoryTableProps> = ({ onSelect
           </thead>
           <tbody className="divide-y divide-[#D3D3FF]/60">
             {filtered.map((s) => (
-              <tr key={s.id} className="hover:bg-[#D3D3FF]/20 transition">
+              <tr key={s.id} className="table-row-3d transition cursor-pointer">
                 <td className="py-3.5 px-4 font-bold text-slate-900">{s.title}</td>
                 <td className="py-3.5 px-4">
                   <span className="rounded-md bg-[#D3D3FF]/80 px-2 py-0.5 text-[10px] font-bold text-[#80A8FF]">

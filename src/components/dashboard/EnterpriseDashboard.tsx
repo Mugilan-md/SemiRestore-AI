@@ -78,10 +78,10 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
         </div>
       </div>
 
-      {/* KPI Cards Grid with Pure Shimmering 24K Gold Values */}
+      {/* KPI Cards Grid with Pure Shimmering 24K Gold Values & 3D Tactile Effects */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* PSNR Improvement Gain */}
-        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF]">
+        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF] card-3d-tactile cursor-pointer">
           <div className="flex items-center justify-between text-slate-500">
             <span className="text-xs font-bold">Avg PSNR Improvement</span>
             <div className="h-8 w-8 rounded-xl bg-[#D3D3FF]/50 text-[#80A8FF] flex items-center justify-center border border-[#80A8FF]/30">
@@ -98,7 +98,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
         </div>
 
         {/* SSIM Index */}
-        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF]">
+        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF] card-3d-tactile cursor-pointer">
           <div className="flex items-center justify-between text-slate-500">
             <span className="text-xs font-bold">Structural Similarity (SSIM)</span>
             <div className="h-8 w-8 rounded-xl bg-[#CEB5FF]/50 text-[#CEB5FF] flex items-center justify-center border border-[#CEB5FF]/60">
@@ -115,7 +115,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
         </div>
 
         {/* Inference Latency */}
-        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF]">
+        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF] card-3d-tactile cursor-pointer">
           <div className="flex items-center justify-between text-slate-500">
             <span className="text-xs font-bold">Inference Latency</span>
             <div className="h-8 w-8 rounded-xl bg-[#8EC1DE]/40 text-[#8EC1DE] flex items-center justify-center border border-[#8EC1DE]/60">
@@ -132,7 +132,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
         </div>
 
         {/* Tier-1 Yield Rate */}
-        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF]">
+        <div className="moondust-glass rounded-2xl p-5 border border-[#CEB5FF] card-3d-tactile cursor-pointer">
           <div className="flex items-center justify-between text-slate-500">
             <span className="text-xs font-bold">Tier-1 Wafer Yield</span>
             <div className="h-8 w-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-200">
@@ -154,7 +154,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
         {/* Left 8 Cols: Upload Quick Card & Charts */}
         <div className="lg:col-span-8 space-y-6">
           {/* Quick Action Upload Card */}
-          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] bg-gradient-to-r from-white/90 via-[#D3D3FF]/40 to-[#8EC1DE]/30 relative overflow-hidden shadow-lg">
+          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] bg-gradient-to-r from-white/90 via-[#D3D3FF]/40 to-[#8EC1DE]/30 relative overflow-hidden shadow-lg card-3d-tactile cursor-pointer">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 relative z-10">
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -182,7 +182,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
           </div>
 
           {/* PSNR Improvement Chart */}
-          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF]">
+          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] card-3d-tactile">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-bold text-slate-900">PSNR & SSIM Quality Restoration Trends</h3>
@@ -219,7 +219,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
           </div>
 
           {/* Recent Inspection Log */}
-          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF]">
+          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] card-3d-tactile">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-slate-900">Recent Metrology Inspections</h3>
               <button
@@ -238,7 +238,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                     onSelectSample(sample);
                     setActiveTab('workspace');
                   }}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-2xl bg-white/80 border border-[#D3D3FF] hover:border-[#80A8FF] hover:bg-[#D3D3FF]/20 transition cursor-pointer gap-3"
+                  className="table-row-3d flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-2xl bg-white/80 border border-[#D3D3FF] hover:border-[#80A8FF] hover:bg-[#D3D3FF]/20 transition cursor-pointer gap-3"
                 >
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-xl bg-slate-900 text-[#8EC1DE] flex items-center justify-center shrink-0 border border-[#8EC1DE]/40">
@@ -281,7 +281,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
         {/* Right 4 Cols: GPU Status & Model Health */}
         <div className="lg:col-span-4 space-y-6">
           {/* GPU Health Card */}
-          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF]">
+          <div className="moondust-glass rounded-3xl p-6 border border-[#CEB5FF] card-3d-tactile">
             <div className="flex items-center justify-between pb-3 border-b border-[#D3D3FF]/50">
               <div className="flex items-center gap-2">
                 <Server className="h-4 w-4 text-[#80A8FF]" />

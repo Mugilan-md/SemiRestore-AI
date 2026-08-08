@@ -109,7 +109,7 @@ export const LivePipelineMonitor: React.FC = () => {
             return (
               <div
                 key={stg.id}
-                className={`moondust-glass rounded-2xl p-4 border transition-all ${
+                className={`moondust-glass rounded-2xl p-4 border transition-all card-3d-tactile cursor-pointer ${
                   isCurrent
                     ? 'border-[#80A8FF] bg-[#D3D3FF]/40 ring-2 ring-[#80A8FF]/30 shadow-md'
                     : isCompleted
@@ -163,9 +163,10 @@ export const LivePipelineMonitor: React.FC = () => {
           })}
         </div>
 
-        {/* Right 5 Cols: CUDA Console Stream */}
-        <div className="lg:col-span-5">
-          <div className="moondust-glass-dark rounded-3xl p-5 border border-[#8EC1DE]/30 text-white h-full flex flex-col justify-between shadow-2xl">
+        {/* Right 5 Cols: Real-time Terminal Log & Performance Metrics */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Terminal Card with 3D Depth */}
+          <div className="moondust-glass-dark rounded-3xl p-5 border border-[#8EC1DE]/40 text-white space-y-3 font-mono shadow-xl card-3d-dark-tactile">
             <div>
               <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
                 <div className="flex items-center gap-2">
