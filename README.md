@@ -20,12 +20,12 @@ cd SemiRestore-AI
 pip install -r requirements.txt
 ```
 
-### Step 3 — Download trained model weights
-The trained model weights are available at:
+### Step 3 — Download trained model weights / Open Colab
+The training pipeline and trained model weights are accessible at:
 
-> 📥 **[Download `best.pt` from Google Drive / HuggingFace — link here]**
+> 📥 **[Open Google Colab Training Notebook & Model Checkpoints](https://colab.research.google.com/drive/1B7xNmDLNU8NaZrXY1KEy3jNJZcaAOh19?usp=drive_link)**
 
-Place the downloaded file at:
+Place the trained model file at:
 ```
 checkpoints/best.pt
 ```
