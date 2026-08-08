@@ -63,7 +63,13 @@ def run_pytorch(ckpt_path: Path, test_dir: Path, out_dir: Path):
     print(f"[INFO] Using device: {device}")
 
     model = SemiRestoreNet()
-    state = torch.load(str(ckpt_path), map_location=device)
+    checkpoint = torch.load(str(ckpt_path), map_location=device)
+    if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
+        state = checkpoint["model_state_dict"]
+    elif isinstance(checkpoint, dict) and "state_dict" in checkpoint:
+        state = checkpoint["state_dict"]
+    else:
+        state = checkpoint
     model.load_state_dict(state)
     model.eval()
     model.to(device)
