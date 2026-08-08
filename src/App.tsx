@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ActiveTab, WaferSample, ViewMode } from './types/semicon';
+import { AuthProvider } from './contexts/AuthContext';
 import { PRESET_WAFER_SAMPLES } from './services/imageProcessingEngine';
 import { Navbar } from './components/layout/Navbar';
 import { LandingPage } from './components/landing/LandingPage';
@@ -32,6 +33,7 @@ export function App() {
   };
 
   return (
+    <AuthProvider>
     <div className="min-h-screen bg-moondust-mesh text-slate-900 flex flex-col font-sans selection:bg-[#CEB5FF] selection:text-slate-900 relative">
       {/* Background Ambient Moon Dust Glow Orbs */}
       <div className="fixed top-0 left-1/4 w-[600px] h-[500px] bg-[#CEB5FF]/30 blur-[130px] rounded-full pointer-events-none -z-10" />
@@ -134,6 +136,7 @@ export function App() {
         </div>
       </footer>
     </div>
+    </AuthProvider>
   );
 }
 

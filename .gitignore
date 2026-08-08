@@ -22,3 +22,18 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment secrets — NEVER commit these
+.env.local
+.env.*.local
+
+# Large model weight files — use Git LFS or share via Google Drive/HuggingFace
+checkpoints/*.pt
+checkpoints/*.pth
+# Keep .onnx files if small enough, otherwise add here too
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/

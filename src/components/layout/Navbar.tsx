@@ -14,8 +14,12 @@ import {
   CheckCircle2,
   AlertTriangle,
   Zap,
+  LogIn,
+  LogOut,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '../../contexts/AuthContext';
+import { AuthModal } from '../auth/AuthModal';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -30,10 +34,21 @@ export const Navbar: React.FC<NavbarProps> = ({
   searchTerm,
   setSearchTerm,
 }) => {
+  const { user, signOut } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [hoveredTab, setHoveredTab] = useState<ActiveTab | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // Derive display name from user metadata or email
+  const displayName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Operator';
+  const initials = displayName
+    .split(' ')
+    .map((w: string) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
 
   const notifications = [
     {
@@ -251,58 +266,83 @@ export const Navbar: React.FC<NavbarProps> = ({
             </AnimatePresence>
           </div>
 
-          {/* User Profile */}
-          <div className="relative shrink-0">
-            <button
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-1.5 sm:px-2.5 sm:py-1.5 hover:bg-white/[0.1] transition cursor-pointer shrink-0"
-            >
-              <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-[11px] font-black text-slate-950 shrink-0">
-                EV
-              </div>
-              <span className="hidden sm:inline-block font-royal-sans text-xs font-bold text-[#FFF4D0] whitespace-nowrap">
-                Dr. Vance
-              </span>
-              <ChevronDown className="h-3 w-3 text-[#D4AF37] shrink-0" />
-            </button>
+          {/* User Profile / Auth */}
+          {user ? (
+            <div className="relative shrink-0">
+              <button
+                onClick={() => setShowProfileMenu(!showProfileMenu)}
+                className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-1.5 sm:px-2.5 sm:py-1.5 hover:bg-white/[0.1] transition cursor-pointer shrink-0"
+              >
+                <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-[11px] font-black text-slate-950 shrink-0">
+                  {initials}
+                </div>
+                <span className="hidden sm:inline-block font-royal-sans text-xs font-bold text-[#FFF4D0] whitespace-nowrap max-w-[90px] truncate">
+                  {displayName}
+                </span>
+                <ChevronDown className="h-3 w-3 text-[#D4AF37] shrink-0" />
+              </button>
 
-            <AnimatePresence>
-              {showProfileMenu && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                  className="absolute right-0 mt-2 w-60 rounded-2xl border border-[#D4AF37]/50 bg-[#0B0D17]/98 backdrop-blur-2xl p-3 shadow-2xl z-50 text-white"
-                >
-                  <div className="p-2 border-b border-[#D4AF37]/20">
-                    <p className="font-cinzel text-xs font-bold text-[#FFF8D6]">Dr. Elena Vance</p>
-                    <p className="text-[11px] text-[#D3D3FF]/70">Lead Metrology Engineer</p>
-                    <p className="text-[9px] font-mono font-bold text-[#FFD700] mt-1">TSMC / Intel Node</p>
-                  </div>
-                  <div className="mt-1.5 pt-1 space-y-1 font-royal-sans">
-                    <button
-                      onClick={() => {
-                        setActiveTab('settings');
-                        setShowProfileMenu(false);
-                      }}
-                      className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition cursor-pointer"
-                    >
-                      Account Settings & GPU Nodes
-                    </button>
-                    <button
-                      onClick={() => {
-                        setActiveTab('report');
-                        setShowProfileMenu(false);
-                      }}
-                      className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition cursor-pointer"
-                    >
-                      Export Inspection Certificate
-                    </button>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+              <AnimatePresence>
+                {showProfileMenu && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    className="absolute right-0 mt-2 w-64 rounded-2xl border border-[#D4AF37]/50 bg-[#0B0D17]/98 backdrop-blur-2xl p-3 shadow-2xl z-50 text-white"
+                  >
+                    <div className="p-2 border-b border-[#D4AF37]/20">
+                      <p className="font-cinzel text-xs font-bold text-[#FFF8D6] truncate">{displayName}</p>
+                      <p className="text-[11px] text-[#D3D3FF]/70 truncate">{user.email}</p>
+                      <div className="flex items-center gap-1.5 mt-1">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span className="text-[9px] font-mono font-bold text-emerald-400">Connected to Supabase</span>
+                      </div>
+                    </div>
+                    <div className="mt-1.5 pt-1 space-y-1 font-royal-sans">
+                      <button
+                        onClick={() => {
+                          setActiveTab('settings');
+                          setShowProfileMenu(false);
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition cursor-pointer"
+                      >
+                        Account Settings & GPU Nodes
+                      </button>
+                      <button
+                        onClick={() => {
+                          setActiveTab('report');
+                          setShowProfileMenu(false);
+                        }}
+                        className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition cursor-pointer"
+                      >
+                        Export Inspection Certificate
+                      </button>
+                      <button
+                        onClick={async () => {
+                          setShowProfileMenu(false);
+                          await signOut();
+                        }}
+                        className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-xs font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition cursor-pointer"
+                      >
+                        <LogOut className="h-3.5 w-3.5" /> Sign Out
+                      </button>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ) : (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="flex items-center gap-1.5 rounded-xl border border-[#D4AF37]/50 bg-gradient-to-r from-[#BF953F]/20 to-[#FFD700]/10 px-3 py-1.5 text-xs font-black text-[#FFF4D0] font-royal-sans hover:from-[#BF953F]/30 hover:to-[#FFD700]/20 hover:border-[#FFD700]/60 transition cursor-pointer shrink-0"
+            >
+              <LogIn className="h-3.5 w-3.5 text-[#FFD700]" />
+              <span className="hidden sm:inline">Sign In</span>
+            </button>
+          )}
+
+          {/* Auth Modal */}
+          <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
         </div>
       </div>
 

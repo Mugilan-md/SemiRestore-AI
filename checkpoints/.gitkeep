@@ -1,0 +1,5 @@
+# Checkpoints folder
+# Model weights are NOT committed to git (too large).
+# Download the trained weights from the link in README.md and place them here:
+#   checkpoints/best.pt         ← PyTorch checkpoint
+#   checkpoints/semirestore.onnx ← ONNX export
