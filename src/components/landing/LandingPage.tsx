@@ -173,7 +173,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="lg:col-span-5 relative flex justify-center items-center"
           >
-            <div className="relative w-full max-w-md aspect-square rounded-3xl moondust-glass p-6 shadow-2xl border border-[#CEB5FF] flex items-center justify-center overflow-hidden">
+            <div className="relative w-full max-w-md aspect-square rounded-3xl moondust-glass p-6 shadow-2xl border border-[#CEB5FF] flex items-center justify-center overflow-hidden card-important-hover">
               {/* Glowing Background Radial using Moon dust */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#CEB5FF]/30 via-[#8EC1DE]/20 to-transparent" />
 
@@ -272,11 +272,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {features.map((feat, index) => {
             const Icon = feat.icon;
+            const isImportant = index === 0 || index === 1; // Top primary modules have important hover
             return (
-              <motion.div
+              <div
                 key={index}
-                whileHover={{ y: -4 }}
-                className="moondust-glass-interactive rounded-2xl p-6 flex flex-col justify-between"
+                className={`moondust-glass rounded-2xl p-6 flex flex-col justify-between ${
+                  isImportant ? 'card-important-hover cursor-pointer' : ''
+                }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
@@ -293,7 +295,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
                 <div className="mt-6 pt-3 border-t border-[#CEB5FF]/40 flex items-center justify-between">
                   <span className="text-[11px] font-bold text-[#80A8FF]">Explore Module &rarr;</span>
                 </div>
-              </motion.div>
+              </div>
             );
           })}
         </div>

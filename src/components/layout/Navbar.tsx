@@ -33,6 +33,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [hoveredTab, setHoveredTab] = useState<ActiveTab | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   const notifications = [
     {
@@ -69,40 +70,48 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-50 w-full navbar-solid-black transition-all">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 gap-4">
-        {/* Brand Logo & Royal Name with Sparkling 24K Gold Text */}
-        <div className="flex items-center gap-5 shrink-0">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-3 sm:px-5 lg:px-8 gap-2 lg:gap-6">
+        
+        {/* Brand Logo & Royal Title with Crisp Sparkling Star Effect (No Blurry Halo) */}
+        <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={() => setActiveTab('landing')}
-            className="flex items-center gap-3.5 text-left focus:outline-none group"
+            className="flex items-center gap-3 text-left focus:outline-none group cursor-pointer"
           >
-            <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFD700] via-[#BF953F] to-[#7A5310] text-white shadow-lg shadow-[#FFD700]/25 group-hover:scale-105 transition-transform p-0.5">
-              <div className="h-full w-full bg-[#08090E] rounded-[14px] flex items-center justify-center border border-[#FFD700]/40">
-                <Cpu className="h-6 w-6 text-[#FFD700] animate-pulse" />
+            <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFD700] via-[#BF953F] to-[#7A5310] text-white shadow-md p-0.5 group-hover:scale-105 transition-transform">
+              <div className="h-full w-full bg-[#08090E] rounded-[14px] flex items-center justify-center border border-[#FFD700]/30">
+                <Cpu className="h-5 w-5 sm:h-6 sm:w-6 text-[#FFD700]" />
               </div>
-              <div className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full bg-emerald-500 ring-2 ring-[#08090E]" />
+              <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-[#08090E]" />
             </div>
 
             <div>
-              <div className="flex items-center gap-2.5">
-                <span className="font-cinzel text-xl sm:text-2xl font-black tracking-wider text-navbar-gold-sparkle">
-                  SemiRestore<span className="text-[#FFD700]">.AI</span>
-                </span>
-                <span className="rounded-md badge-gold-glitter px-2 py-0.5 text-[10px] font-black tracking-widest uppercase shadow-xs">
+              <div className="flex items-center gap-2">
+                {/* Crisp Sparkling Pure Gold Title */}
+                <div className="relative inline-flex items-center">
+                  <span className="font-cinzel text-lg sm:text-xl font-black tracking-wider text-navbar-sparkle">
+                    SemiRestore<span className="text-[#FFD700]">.AI</span>
+                  </span>
+                  {/* Subtle Shimmering Sparkle Stars */}
+                  <span className="sparkle-star-1 text-[#FFF8D6] text-[10px] select-none ml-1">✦</span>
+                  <span className="sparkle-star-2 text-[#FFD700] text-[8px] select-none -mt-2 -ml-0.5">✦</span>
+                </div>
+
+                <span className="rounded-md badge-gold-solid px-1.5 py-0.5 text-[9px] font-black tracking-wider uppercase">
                   ENTERPRISE
                 </span>
               </div>
-              <p className="font-royal-sans text-[11px] font-semibold tracking-wide text-[#E6BF83]/80">
+              <p className="font-royal-sans text-[10px] sm:text-[11px] font-medium tracking-wide text-[#E6BF83]/90 hidden sm:block">
                 Semiconductor Image Metrology & Restoration
               </p>
             </div>
           </button>
         </div>
 
-        {/* Navigation Links with Smooth Sliding Pill & Equal Proportional Spacing */}
+        {/* Center Navigation Links: Fully Visible, Equal Spacing, Zero Clipping */}
         <nav 
           onMouseLeave={() => setHoveredTab(null)}
-          className="hidden md:flex items-center justify-between gap-1.5 lg:gap-2.5 px-3 py-1.5 rounded-2xl bg-white/[0.05] border border-[#D4AF37]/35 backdrop-blur-md relative mx-2 lg:mx-4"
+          className="hidden md:flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-2 px-2.5 py-1.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/30 backdrop-blur-md relative"
         >
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -114,13 +123,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 onMouseEnter={() => setHoveredTab(item.id)}
-                className={`relative flex items-center justify-center gap-1.5 lg:gap-2 rounded-xl px-2.5 lg:px-3.5 py-2 text-[11px] lg:text-xs font-royal-sans font-bold tracking-wide transition-all duration-200 z-10 text-center whitespace-nowrap ${
+                className={`relative flex items-center justify-center gap-1.5 rounded-xl px-2.5 lg:px-3.5 py-2 text-xs font-royal-sans font-bold tracking-wide transition-colors duration-150 z-10 whitespace-nowrap cursor-pointer ${
                   isActive
                     ? 'text-[#FFF8D6]'
                     : 'text-[#D3D3FF]/80 hover:text-[#FFF4B8]'
                 }`}
               >
-                <Icon className={`h-3.5 w-3.5 lg:h-4 lg:w-4 shrink-0 transition-colors ${
+                <Icon className={`h-3.5 w-3.5 shrink-0 transition-colors ${
                   isActive ? 'text-[#FFD700]' : 'text-[#CEB5FF]/70'
                 }`} />
                 <span>{item.label}</span>
@@ -130,7 +139,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <motion.div
                     layoutId="navbarSlidingIndicator"
                     className="absolute inset-0 rounded-xl navbar-active-gold-pill z-[-1]"
-                    transition={{ type: 'spring', stiffness: 420, damping: 32 }}
+                    transition={{ type: 'spring', stiffness: 450, damping: 35 }}
                   />
                 )}
 
@@ -138,8 +147,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {isHovered && !isActive && (
                   <motion.div
                     layoutId="navbarHoverIndicator"
-                    className="absolute inset-0 rounded-xl bg-white/[0.06] border border-[#D4AF37]/30 z-[-2]"
-                    transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                    className="absolute inset-0 rounded-xl bg-white/[0.06] border border-[#D4AF37]/25 z-[-2]"
+                    transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                   />
                 )}
               </button>
@@ -147,36 +156,56 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Right Search, GPU Badge, Notifications, Profile */}
-        <div className="flex items-center gap-3.5 shrink-0">
-          {/* Global Search */}
-          <div className="relative hidden lg:block w-60">
-            <Search className="absolute left-3.5 top-3 h-4 w-4 text-[#D4AF37]/70" />
-            <input
-              type="text"
-              placeholder="Search wafer ID, defect..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full rounded-xl border border-[#D4AF37]/40 bg-white/[0.06] py-2 pl-10 pr-3 text-xs font-royal-sans font-medium text-[#FFF4D0] placeholder-[#D3D3FF]/50 transition focus:border-[#FFD700] focus:bg-white/[0.1] focus:outline-none focus:ring-2 focus:ring-[#FFD700]/25"
-            />
+        {/* Right Controls: Compact & Responsive to Prevent Overcrowding */}
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          
+          {/* Search: Expandable or Compact */}
+          <div className="relative">
+            {searchOpen ? (
+              <motion.div 
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 200, opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                className="relative"
+              >
+                <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#D4AF37]" />
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Search wafer..."
+                  value={searchTerm}
+                  onBlur={() => !searchTerm && setSearchOpen(false)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full rounded-xl border border-[#D4AF37]/50 bg-white/[0.08] py-1.5 pl-8 pr-3 text-xs font-royal-sans text-[#FFF4D0] placeholder-[#D3D3FF]/50 focus:border-[#FFD700] focus:outline-none focus:ring-1 focus:ring-[#FFD700]/30"
+                />
+              </motion.div>
+            ) : (
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer"
+                title="Search Wafers"
+              >
+                <Search className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
-          {/* GPU Status Pill with Sparkling Real Gold & Obsidian Base */}
-          <div className="hidden sm:flex items-center gap-2 rounded-full border border-[#D4AF37]/70 bg-gradient-to-r from-[#141829] via-[#0B0D17] to-[#141829] px-3.5 py-1.5 text-[11px] font-royal-sans font-extrabold shadow-md">
-            <Zap className="h-3.5 w-3.5 text-[#FFD700] fill-[#FFD700] animate-pulse" />
-            <span className="text-navbar-gold-sparkle font-black tracking-wide">NVIDIA H100 SXM5</span>
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-ping ml-0.5" />
+          {/* GPU Status Pill */}
+          <div className="hidden xl:flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-[#121524] px-3 py-1 text-[11px] font-royal-sans font-bold shadow-xs">
+            <Zap className="h-3.5 w-3.5 text-[#FFD700] fill-[#FFD700]" />
+            <span className="text-[#FFF4D0] font-black tracking-wide">H100 SXM5</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
           </div>
 
           {/* Notifications Button */}
           <div className="relative">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative rounded-xl border border-[#D4AF37]/50 bg-white/[0.06] p-2.5 text-[#E6BF83] hover:bg-white/[0.12] hover:text-[#FFD700] transition focus:outline-none shadow-xs"
+              className="relative rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer"
               title="Notifications"
             >
               <Bell className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-[9px] font-black text-slate-950 ring-2 ring-[#08090E]">
+              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-[8px] font-black text-slate-950 ring-1 ring-[#08090E]">
                 3
               </span>
             </button>
@@ -185,26 +214,26 @@ export const Navbar: React.FC<NavbarProps> = ({
             <AnimatePresence>
               {showNotifications && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  transition={{ duration: 0.15 }}
-                  className="absolute right-0 mt-2 w-84 rounded-3xl border border-[#D4AF37]/60 bg-[#0B0D17]/98 backdrop-blur-2xl p-4 shadow-2xl z-50 text-white"
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.12 }}
+                  className="absolute right-0 mt-2 w-80 rounded-2xl border border-[#D4AF37]/50 bg-[#0B0D17]/98 backdrop-blur-2xl p-4 shadow-2xl z-50 text-white"
                 >
-                  <div className="flex items-center justify-between pb-3 border-b border-[#D4AF37]/30">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-[#D4AF37]/20">
                     <h4 className="text-xs font-cinzel font-bold text-[#FFF8D6] flex items-center gap-2">
                       <Bell className="h-3.5 w-3.5 text-[#FFD700]" /> Metrology Alerts
                     </h4>
-                    <span className="text-[10px] font-black text-navbar-gold-sparkle badge-gold-glitter px-2 py-0.5 rounded-md">
-                      3 New
+                    <span className="text-[9px] font-black text-[#693D04] bg-[#FFD700] px-2 py-0.5 rounded-md font-mono">
+                      3 NEW
                     </span>
                   </div>
 
-                  <div className="mt-3 space-y-2.5 max-h-64 overflow-y-auto pr-1">
+                  <div className="mt-2.5 space-y-2 max-h-60 overflow-y-auto pr-1">
                     {notifications.map((n) => (
                       <div
                         key={n.id}
-                        className="p-2.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/20 hover:bg-white/[0.08] transition flex items-start gap-2.5"
+                        className="p-2 rounded-xl bg-white/[0.04] border border-[#D4AF37]/15 hover:bg-white/[0.08] transition flex items-start gap-2.5"
                       >
                         {n.type === 'success' && <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />}
                         {n.type === 'warning' && <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />}
@@ -226,48 +255,48 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative">
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center gap-2.5 rounded-xl border border-[#D4AF37]/50 bg-white/[0.06] p-2 hover:bg-white/[0.12] transition focus:outline-none shadow-xs"
+              className="flex items-center gap-2 rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-1.5 sm:px-2.5 sm:py-1.5 hover:bg-white/[0.1] transition cursor-pointer"
             >
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-xs font-black text-slate-950 shadow-xs">
+              <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-[11px] font-black text-slate-950">
                 EV
               </div>
-              <span className="hidden sm:inline-block font-royal-sans text-xs font-extrabold text-[#FFF4D0]">
+              <span className="hidden sm:inline-block font-royal-sans text-xs font-bold text-[#FFF4D0]">
                 Dr. Vance
               </span>
-              <ChevronDown className="h-3.5 w-3.5 text-[#D4AF37]" />
+              <ChevronDown className="h-3 w-3 text-[#D4AF37]" />
             </button>
 
             <AnimatePresence>
               {showProfileMenu && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                  className="absolute right-0 mt-2 w-64 rounded-3xl border border-[#D4AF37]/60 bg-[#0B0D17]/98 backdrop-blur-2xl p-3 shadow-2xl z-50 text-white"
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  className="absolute right-0 mt-2 w-60 rounded-2xl border border-[#D4AF37]/50 bg-[#0B0D17]/98 backdrop-blur-2xl p-3 shadow-2xl z-50 text-white"
                 >
-                  <div className="p-2 border-b border-[#D4AF37]/30">
+                  <div className="p-2 border-b border-[#D4AF37]/20">
                     <p className="font-cinzel text-xs font-bold text-[#FFF8D6]">Dr. Elena Vance</p>
                     <p className="text-[11px] text-[#D3D3FF]/70">Lead Metrology Engineer</p>
-                    <p className="text-[10px] font-black text-navbar-gold-sparkle mt-1">TSMC / Intel Enterprise Portal</p>
+                    <p className="text-[9px] font-mono font-bold text-[#FFD700] mt-1">TSMC / Intel Node</p>
                   </div>
-                  <div className="mt-2 pt-1 space-y-1 font-royal-sans">
+                  <div className="mt-1.5 pt-1 space-y-1 font-royal-sans">
                     <button
                       onClick={() => {
                         setActiveTab('settings');
                         setShowProfileMenu(false);
                       }}
-                      className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition"
+                      className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition cursor-pointer"
                     >
-                      Account Settings & API Keys
+                      Account Settings & GPU Nodes
                     </button>
                     <button
                       onClick={() => {
                         setActiveTab('report');
                         setShowProfileMenu(false);
                       }}
-                      className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition"
+                      className="w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium text-[#E6BF83] hover:bg-white/[0.08] hover:text-[#FFF6C7] transition cursor-pointer"
                     >
-                      Export Metrology Certificates
+                      Export Inspection Certificate
                     </button>
                   </div>
                 </motion.div>
@@ -275,6 +304,28 @@ export const Navbar: React.FC<NavbarProps> = ({
             </AnimatePresence>
           </div>
         </div>
+      </div>
+
+      {/* Mobile / Tablet Horizontal Navigation Tabs Row */}
+      <div className="flex md:hidden overflow-x-auto px-3 py-2 border-t border-[#D4AF37]/20 bg-[#08090E] gap-2">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
+                isActive
+                  ? 'navbar-active-gold-pill text-[#FFF8D6]'
+                  : 'text-[#D3D3FF]/70 hover:text-white'
+              }`}
+            >
+              <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-[#FFD700]' : 'text-[#CEB5FF]/70'}`} />
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
       </div>
     </header>
   );
