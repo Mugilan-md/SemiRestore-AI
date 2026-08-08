@@ -203,8 +203,6 @@
 
 /* ==========================================================================
    UNIVERSAL 3D TACTILE HOVER EFFECTS ACROSS ALL CARDS & COLUMNS
-   (Overview, Dashboard, Workspace, Pipeline, Batch History, Settings)
-   Zero Wobble - Ultra Smooth Spring Elevation
    ========================================================================== */
 
 .card-3d-tactile {
@@ -277,8 +275,20 @@
 }
 
 /* ==========================================================================
-   PURE 24K GOLD TYPOGRAPHY ON BODY
+   DYNAMIC GLITTERING 24K GOLD TEXT INSIDE WEBSITE CARDS & CONTENTS
    ========================================================================== */
+
+@keyframes goldGlitterShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
 .text-gold-glitter {
   background: linear-gradient(
@@ -290,11 +300,12 @@
     #FFDF73 65%,
     #8C5A10 100%
   );
-  background-size: 200% auto;
+  background-size: 220% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
   font-weight: 800;
+  animation: goldGlitterShimmer 3.5s ease-in-out infinite;
 }
 
 .text-gold-glitter-lg {
@@ -312,6 +323,7 @@
   -webkit-text-fill-color: transparent;
   display: inline-block;
   font-weight: 900;
+  animation: goldGlitterShimmer 3.5s ease-in-out infinite;
 }
 
 .badge-gold-glitter {

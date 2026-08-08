@@ -70,10 +70,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-50 w-full navbar-solid-black transition-all">
-      <div className="w-full max-w-[1440px] mx-auto flex h-20 items-center justify-between px-3 sm:px-5 lg:px-8 gap-2 sm:gap-4 lg:gap-6">
+      <div className="w-full max-w-[1480px] mx-auto flex h-20 items-center justify-between px-3 sm:px-5 lg:px-8 gap-2 sm:gap-4 lg:gap-6">
         
-        {/* Brand Logo & Royal Title with Crisp Sparkling Star Effect (No Blurry Halo) */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* Left Section: Brand Logo & Title + Search Icon Moved to the Left */}
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
           <button
             onClick={() => setActiveTab('landing')}
             className="flex items-center gap-2.5 sm:gap-3 text-left focus:outline-none group cursor-pointer"
@@ -87,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="shrink-0">
               <div className="flex items-center gap-1.5 sm:gap-2">
-                {/* Crisp Sparkling Pure Gold Title */}
+                {/* Crisp Sparkling Pure Gold Title (No Blurry Halo) */}
                 <div className="relative inline-flex items-center">
                   <span className="font-cinzel text-base sm:text-xl font-black tracking-wider text-navbar-sparkle whitespace-nowrap">
                     SemiRestore<span className="text-[#FFD700]">.AI</span>
@@ -106,12 +106,43 @@ export const Navbar: React.FC<NavbarProps> = ({
               </p>
             </div>
           </button>
+
+          {/* Search Icon & Bar Moved to the Left Side */}
+          <div className="relative shrink-0 ml-1 sm:ml-2">
+            {searchOpen ? (
+              <motion.div 
+                initial={{ width: 0, opacity: 0 }}
+                animate={{ width: 170, opacity: 1 }}
+                exit={{ width: 0, opacity: 0 }}
+                className="relative"
+              >
+                <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[#D4AF37]" />
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Search wafer..."
+                  value={searchTerm}
+                  onBlur={() => !searchTerm && setSearchOpen(false)}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full rounded-xl border border-[#D4AF37]/50 bg-white/[0.08] py-1.5 pl-8 pr-2 text-xs font-royal-sans text-[#FFF4D0] placeholder-[#D3D3FF]/50 focus:border-[#FFD700] focus:outline-none focus:ring-1 focus:ring-[#FFD700]/30"
+                />
+              </motion.div>
+            ) : (
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer shrink-0"
+                title="Search Wafers"
+              >
+                <Search className="h-4 w-4" />
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Center Navigation Links: Fully Visible, Equal Spacing, 3D Tactile Effects */}
         <nav 
           onMouseLeave={() => setHoveredTab(null)}
-          className="hidden md:flex items-center justify-center gap-1.5 lg:gap-2.5 px-2.5 sm:px-3 py-1.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md relative shrink"
+          className="hidden md:flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-2 px-2.5 sm:px-3 py-1.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md relative shrink"
         >
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -123,7 +154,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 onMouseEnter={() => setHoveredTab(item.id)}
-                className={`navbar-tab-3d relative flex items-center justify-center gap-1.5 rounded-xl px-2.5 sm:px-3 lg:px-3.5 py-2 text-[11px] lg:text-xs font-royal-sans font-bold tracking-wide z-10 whitespace-nowrap cursor-pointer shrink-0 border border-transparent ${
+                className={`navbar-tab-3d relative flex items-center justify-center gap-1.5 rounded-xl px-2 sm:px-2.5 lg:px-3 py-2 text-[11px] lg:text-xs font-royal-sans font-bold tracking-wide z-10 whitespace-nowrap cursor-pointer shrink-0 border border-transparent ${
                   isActive
                     ? 'text-[#FFF8D6] border-[#D4AF37]/60'
                     : 'text-[#D3D3FF]/85 hover:text-[#FFF4B8]'
@@ -156,45 +187,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Right Controls: Compact, Fully Visible, Zero Truncation */}
+        {/* Right Controls: H100 SXM5 Pill 100% Unclipped & Clearly Visible, Notifications, Profile */}
         <div className="flex items-center gap-2 sm:gap-2.5 lg:gap-3 shrink-0">
           
-          {/* Search: Expandable or Compact */}
-          <div className="relative shrink-0">
-            {searchOpen ? (
-              <motion.div 
-                initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 180, opacity: 1 }}
-                exit={{ width: 0, opacity: 0 }}
-                className="relative"
-              >
-                <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[#D4AF37]" />
-                <input
-                  type="text"
-                  autoFocus
-                  placeholder="Search wafer..."
-                  value={searchTerm}
-                  onBlur={() => !searchTerm && setSearchOpen(false)}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full rounded-xl border border-[#D4AF37]/50 bg-white/[0.08] py-1.5 pl-8 pr-2 text-xs font-royal-sans text-[#FFF4D0] placeholder-[#D3D3FF]/50 focus:border-[#FFD700] focus:outline-none focus:ring-1 focus:ring-[#FFD700]/30"
-                />
-              </motion.div>
-            ) : (
-              <button
-                onClick={() => setSearchOpen(true)}
-                className="rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer shrink-0"
-                title="Search Wafers"
-              >
-                <Search className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-
-          {/* GPU Status Pill: Clean, 100% Unclipped, Fully Visible */}
-          <div className="hidden sm:flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-[#121524] px-2.5 py-1 text-[10px] sm:text-[11px] font-royal-sans font-bold shadow-xs shrink-0 whitespace-nowrap">
+          {/* H100 SXM5 Status Pill: 100% Fully Visible From Start to End With Generous Padding */}
+          <div className="flex items-center gap-2 rounded-full border border-[#D4AF37]/60 bg-[#121524] px-3.5 py-1.5 text-xs font-royal-sans font-black shadow-md shrink-0 whitespace-nowrap">
             <Zap className="h-3.5 w-3.5 text-[#FFD700] fill-[#FFD700] shrink-0" />
-            <span className="text-[#FFF4D0] font-black tracking-wide whitespace-nowrap">H100 SXM5</span>
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5 shrink-0" />
+            <span className="text-[#FFF4D0] font-black tracking-wider whitespace-nowrap">H100 SXM5</span>
+            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse ml-0.5 shrink-0" />
           </div>
 
           {/* Notifications Button */}
