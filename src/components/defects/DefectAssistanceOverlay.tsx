@@ -138,7 +138,7 @@ export const DefectAssistanceOverlay: React.FC<DefectAssistanceOverlayProps> = (
                   <span className="text-[10px] font-bold uppercase text-slate-400">Selected Defect</span>
                   <h4 className="text-sm font-black text-slate-900">{selectedDefect.label}</h4>
                 </div>
-                <span className="text-xs font-black text-gold-glitter badge-gold-glitter px-3 py-1 rounded-xl">
+                <span className="text-xs font-black uppercase tracking-wide badge-gold-glitter px-3 py-1 rounded-xl">
                   {Math.round(selectedDefect.confidence * 100)}% AI Confidence
                 </span>
               </div>

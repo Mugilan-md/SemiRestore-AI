@@ -282,7 +282,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
                     <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#D3D3FF] to-[#CEB5FF]/50 border border-[#80A8FF]/40 flex items-center justify-center text-slate-900 shadow-xs">
                       <Icon className="h-6 w-6 text-[#80A8FF]" />
                     </div>
-                    <span className="text-[10px] font-black text-gold-glitter badge-gold-glitter px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] font-black uppercase tracking-wider badge-gold-glitter px-2.5 py-0.5 rounded-lg">
                       {feat.highlight}
                     </span>
                   </div>

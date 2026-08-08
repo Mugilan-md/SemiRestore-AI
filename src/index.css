@@ -327,10 +327,12 @@
 }
 
 .badge-gold-glitter {
-  background: linear-gradient(135deg, rgba(255, 246, 199, 0.95) 0%, rgba(255, 215, 0, 0.35) 100%);
-  border: 1px solid rgba(212, 175, 55, 0.85);
-  color: #5C3802;
-  font-weight: 800;
+  background: linear-gradient(135deg, #FFD700 0%, #F5CE62 50%, #D4AF37 100%);
+  border: 1px solid #FFF8D6;
+  color: #3D2400 !important;
+  -webkit-text-fill-color: #3D2400 !important;
+  font-weight: 900;
+  box-shadow: 0 2px 6px rgba(212, 175, 55, 0.35);
 }
 
 /* Custom Scrollbars */

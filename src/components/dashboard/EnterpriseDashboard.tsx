@@ -351,7 +351,7 @@ export const EnterpriseDashboard: React.FC<EnterpriseDashboardProps> = ({
                   <h4 className="text-xs font-bold text-slate-900">Restormer Denoising v2.4</h4>
                   <p className="text-[10px] text-slate-500 font-medium">Primary Sub-10nm Denoising Network</p>
                 </div>
-                <span className="text-[10px] font-black text-gold-glitter badge-gold-glitter px-2 py-0.5 rounded-md">
+                <span className="text-[10px] font-black uppercase tracking-wider badge-gold-glitter px-2.5 py-0.5 rounded-lg">
                   Active
                 </span>
               </div>
