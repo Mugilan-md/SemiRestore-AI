@@ -108,10 +108,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           </button>
         </div>
 
-        {/* Center Navigation Links: Fully Visible, Equal Spacing, Zero Clipping */}
+        {/* Center Navigation Links: Fully Visible, Equal Spacing, 3D Tactile Effects */}
         <nav 
           onMouseLeave={() => setHoveredTab(null)}
-          className="hidden md:flex items-center justify-center gap-1 lg:gap-2 px-2 sm:px-3 py-1.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/30 backdrop-blur-md relative shrink"
+          className="hidden md:flex items-center justify-center gap-1.5 lg:gap-2.5 px-2.5 sm:px-3 py-1.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/35 backdrop-blur-md relative shrink"
         >
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -123,14 +123,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 onMouseEnter={() => setHoveredTab(item.id)}
-                className={`relative flex items-center justify-center gap-1.5 rounded-xl px-2 sm:px-2.5 lg:px-3.5 py-2 text-[11px] lg:text-xs font-royal-sans font-bold tracking-wide transition-colors duration-150 z-10 whitespace-nowrap cursor-pointer shrink-0 ${
+                className={`navbar-tab-3d relative flex items-center justify-center gap-1.5 rounded-xl px-2.5 sm:px-3 lg:px-3.5 py-2 text-[11px] lg:text-xs font-royal-sans font-bold tracking-wide z-10 whitespace-nowrap cursor-pointer shrink-0 border border-transparent ${
                   isActive
-                    ? 'text-[#FFF8D6]'
-                    : 'text-[#D3D3FF]/80 hover:text-[#FFF4B8]'
+                    ? 'text-[#FFF8D6] border-[#D4AF37]/60'
+                    : 'text-[#D3D3FF]/85 hover:text-[#FFF4B8]'
                 }`}
               >
                 <Icon className={`h-3.5 w-3.5 shrink-0 transition-colors ${
-                  isActive ? 'text-[#FFD700]' : 'text-[#CEB5FF]/70'
+                  isActive ? 'text-[#FFD700]' : 'text-[#CEB5FF]/80'
                 }`} />
                 <span>{item.label}</span>
 
@@ -147,7 +147,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {isHovered && !isActive && (
                   <motion.div
                     layoutId="navbarHoverIndicator"
-                    className="absolute inset-0 rounded-xl bg-white/[0.06] border border-[#D4AF37]/25 z-[-2]"
+                    className="absolute inset-0 rounded-xl bg-white/[0.07] border border-[#D4AF37]/35 z-[-2]"
                     transition={{ type: 'spring', stiffness: 420, damping: 32 }}
                   />
                 )}
@@ -315,10 +315,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition ${
+              className={`navbar-tab-3d flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition cursor-pointer ${
                 isActive
                   ? 'navbar-active-gold-pill text-[#FFF8D6]'
-                  : 'text-[#D3D3FF]/70 hover:text-white'
+                  : 'text-[#D3D3FF]/75 hover:text-white'
               }`}
             >
               <Icon className={`h-3.5 w-3.5 ${isActive ? 'text-[#FFD700]' : 'text-[#CEB5FF]/70'}`} />
