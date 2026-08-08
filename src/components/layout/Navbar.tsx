@@ -70,26 +70,26 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-50 w-full navbar-solid-black transition-all">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-3 sm:px-5 lg:px-8 gap-2 lg:gap-6">
+      <div className="w-full max-w-[1440px] mx-auto flex h-20 items-center justify-between px-3 sm:px-5 lg:px-8 gap-2 sm:gap-4 lg:gap-6">
         
         {/* Brand Logo & Royal Title with Crisp Sparkling Star Effect (No Blurry Halo) */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <button
             onClick={() => setActiveTab('landing')}
-            className="flex items-center gap-3 text-left focus:outline-none group cursor-pointer"
+            className="flex items-center gap-2.5 sm:gap-3 text-left focus:outline-none group cursor-pointer"
           >
-            <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFD700] via-[#BF953F] to-[#7A5310] text-white shadow-md p-0.5 group-hover:scale-105 transition-transform">
+            <div className="relative flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-[#FFD700] via-[#BF953F] to-[#7A5310] text-white shadow-md p-0.5 group-hover:scale-105 transition-transform shrink-0">
               <div className="h-full w-full bg-[#08090E] rounded-[14px] flex items-center justify-center border border-[#FFD700]/30">
                 <Cpu className="h-5 w-5 sm:h-6 sm:w-6 text-[#FFD700]" />
               </div>
               <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-[#08090E]" />
             </div>
 
-            <div>
-              <div className="flex items-center gap-2">
+            <div className="shrink-0">
+              <div className="flex items-center gap-1.5 sm:gap-2">
                 {/* Crisp Sparkling Pure Gold Title */}
                 <div className="relative inline-flex items-center">
-                  <span className="font-cinzel text-lg sm:text-xl font-black tracking-wider text-navbar-sparkle">
+                  <span className="font-cinzel text-base sm:text-xl font-black tracking-wider text-navbar-sparkle whitespace-nowrap">
                     SemiRestore<span className="text-[#FFD700]">.AI</span>
                   </span>
                   {/* Subtle Shimmering Sparkle Stars */}
@@ -97,11 +97,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span className="sparkle-star-2 text-[#FFD700] text-[8px] select-none -mt-2 -ml-0.5">✦</span>
                 </div>
 
-                <span className="rounded-md badge-gold-solid px-1.5 py-0.5 text-[9px] font-black tracking-wider uppercase">
+                <span className="hidden sm:inline-block rounded-md badge-gold-solid px-1.5 py-0.5 text-[9px] font-black tracking-wider uppercase whitespace-nowrap">
                   ENTERPRISE
                 </span>
               </div>
-              <p className="font-royal-sans text-[10px] sm:text-[11px] font-medium tracking-wide text-[#E6BF83]/90 hidden sm:block">
+              <p className="font-royal-sans text-[10px] sm:text-[11px] font-medium tracking-wide text-[#E6BF83]/90 hidden md:block whitespace-nowrap">
                 Semiconductor Image Metrology & Restoration
               </p>
             </div>
@@ -111,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Center Navigation Links: Fully Visible, Equal Spacing, Zero Clipping */}
         <nav 
           onMouseLeave={() => setHoveredTab(null)}
-          className="hidden md:flex items-center justify-center gap-1 sm:gap-1.5 lg:gap-2 px-2.5 py-1.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/30 backdrop-blur-md relative"
+          className="hidden md:flex items-center justify-center gap-1 lg:gap-2 px-2 sm:px-3 py-1.5 rounded-2xl bg-white/[0.04] border border-[#D4AF37]/30 backdrop-blur-md relative shrink"
         >
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -123,7 +123,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
                 onMouseEnter={() => setHoveredTab(item.id)}
-                className={`relative flex items-center justify-center gap-1.5 rounded-xl px-2.5 lg:px-3.5 py-2 text-xs font-royal-sans font-bold tracking-wide transition-colors duration-150 z-10 whitespace-nowrap cursor-pointer ${
+                className={`relative flex items-center justify-center gap-1.5 rounded-xl px-2 sm:px-2.5 lg:px-3.5 py-2 text-[11px] lg:text-xs font-royal-sans font-bold tracking-wide transition-colors duration-150 z-10 whitespace-nowrap cursor-pointer shrink-0 ${
                   isActive
                     ? 'text-[#FFF8D6]'
                     : 'text-[#D3D3FF]/80 hover:text-[#FFF4B8]'
@@ -156,19 +156,19 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Right Controls: Compact & Responsive to Prevent Overcrowding */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* Right Controls: Compact, Fully Visible, Zero Truncation */}
+        <div className="flex items-center gap-2 sm:gap-2.5 lg:gap-3 shrink-0">
           
           {/* Search: Expandable or Compact */}
-          <div className="relative">
+          <div className="relative shrink-0">
             {searchOpen ? (
               <motion.div 
                 initial={{ width: 0, opacity: 0 }}
-                animate={{ width: 200, opacity: 1 }}
+                animate={{ width: 180, opacity: 1 }}
                 exit={{ width: 0, opacity: 0 }}
                 className="relative"
               >
-                <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#D4AF37]" />
+                <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-[#D4AF37]" />
                 <input
                   type="text"
                   autoFocus
@@ -176,13 +176,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                   value={searchTerm}
                   onBlur={() => !searchTerm && setSearchOpen(false)}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full rounded-xl border border-[#D4AF37]/50 bg-white/[0.08] py-1.5 pl-8 pr-3 text-xs font-royal-sans text-[#FFF4D0] placeholder-[#D3D3FF]/50 focus:border-[#FFD700] focus:outline-none focus:ring-1 focus:ring-[#FFD700]/30"
+                  className="w-full rounded-xl border border-[#D4AF37]/50 bg-white/[0.08] py-1.5 pl-8 pr-2 text-xs font-royal-sans text-[#FFF4D0] placeholder-[#D3D3FF]/50 focus:border-[#FFD700] focus:outline-none focus:ring-1 focus:ring-[#FFD700]/30"
                 />
               </motion.div>
             ) : (
               <button
                 onClick={() => setSearchOpen(true)}
-                className="rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer"
+                className="rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer shrink-0"
                 title="Search Wafers"
               >
                 <Search className="h-4 w-4" />
@@ -190,18 +190,18 @@ export const Navbar: React.FC<NavbarProps> = ({
             )}
           </div>
 
-          {/* GPU Status Pill */}
-          <div className="hidden xl:flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-[#121524] px-3 py-1 text-[11px] font-royal-sans font-bold shadow-xs">
-            <Zap className="h-3.5 w-3.5 text-[#FFD700] fill-[#FFD700]" />
-            <span className="text-[#FFF4D0] font-black tracking-wide">H100 SXM5</span>
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5" />
+          {/* GPU Status Pill: Clean, 100% Unclipped, Fully Visible */}
+          <div className="hidden sm:flex items-center gap-1.5 rounded-full border border-[#D4AF37]/50 bg-[#121524] px-2.5 py-1 text-[10px] sm:text-[11px] font-royal-sans font-bold shadow-xs shrink-0 whitespace-nowrap">
+            <Zap className="h-3.5 w-3.5 text-[#FFD700] fill-[#FFD700] shrink-0" />
+            <span className="text-[#FFF4D0] font-black tracking-wide whitespace-nowrap">H100 SXM5</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse ml-0.5 shrink-0" />
           </div>
 
           {/* Notifications Button */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="relative rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer"
+              className="relative rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-2 text-[#E6BF83] hover:bg-white/[0.1] hover:text-[#FFD700] transition cursor-pointer shrink-0"
               title="Notifications"
             >
               <Bell className="h-4 w-4" />
@@ -252,18 +252,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* User Profile */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center gap-2 rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-1.5 sm:px-2.5 sm:py-1.5 hover:bg-white/[0.1] transition cursor-pointer"
+              className="flex items-center gap-1.5 sm:gap-2 rounded-xl border border-[#D4AF37]/40 bg-white/[0.05] p-1.5 sm:px-2.5 sm:py-1.5 hover:bg-white/[0.1] transition cursor-pointer shrink-0"
             >
-              <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-[11px] font-black text-slate-950">
+              <div className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-gradient-to-r from-[#BF953F] to-[#FFD700] text-[11px] font-black text-slate-950 shrink-0">
                 EV
               </div>
-              <span className="hidden sm:inline-block font-royal-sans text-xs font-bold text-[#FFF4D0]">
+              <span className="hidden sm:inline-block font-royal-sans text-xs font-bold text-[#FFF4D0] whitespace-nowrap">
                 Dr. Vance
               </span>
-              <ChevronDown className="h-3 w-3 text-[#D4AF37]" />
+              <ChevronDown className="h-3 w-3 text-[#D4AF37] shrink-0" />
             </button>
 
             <AnimatePresence>
