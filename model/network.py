@@ -1,8 +1,9 @@
 """
-Restormer Architecture
-======================
-Exact matching architecture for SemiRestore AI trained checkpoint (best_model.pth).
-Multi-Dconv Head Transposed Self-Attention (MDTA) + Gated-Dconv Feed-Forward Network (GDFN).
+SemiRestoreNet (Restormer Architecture)
+=======================================
+Restormer: Efficient Transformer for High-Resolution Semiconductor Image Restoration.
+Joint speckle/Gaussian noise suppression, sub-nanometer feature preservation,
+and edge sharpening for semiconductor wafer metrology (EUV mask, FinFET, TSV).
 """
 
 import torch
@@ -24,7 +25,6 @@ class BiasFree_LayerNorm(nn.Module):
         if isinstance(normalized_shape, int):
             normalized_shape = (normalized_shape,)
         self.weight = nn.Parameter(torch.ones(normalized_shape))
-        self.normalized_shape = normalized_shape
 
     def forward(self, x):
         sigma = x.var(-1, keepdim=True, unbiased=False)
@@ -38,7 +38,6 @@ class WithBias_LayerNorm(nn.Module):
             normalized_shape = (normalized_shape,)
         self.weight = nn.Parameter(torch.ones(normalized_shape))
         self.bias = nn.Parameter(torch.zeros(normalized_shape))
-        self.normalized_shape = normalized_shape
 
     def forward(self, x):
         mu = x.mean(-1, keepdim=True)
@@ -60,14 +59,12 @@ class LayerNorm(nn.Module):
 
 
 class Attention(nn.Module):
-    def __init__(self, dim, num_heads, bias):
+    def __init__(self, dim, num_heads, bias=False):
         super().__init__()
         self.num_heads = num_heads
         self.temperature = nn.Parameter(torch.ones(num_heads, 1, 1))
         self.qkv = nn.Conv2d(dim, dim * 3, kernel_size=1, bias=bias)
-        self.qkv_dwconv = nn.Conv2d(
-            dim * 3, dim * 3, kernel_size=3, stride=1, padding=1, groups=dim * 3, bias=bias
-        )
+        self.qkv_dwconv = nn.Conv2d(dim * 3, dim * 3, kernel_size=3, stride=1, padding=1, groups=dim * 3, bias=bias)
         self.project_out = nn.Conv2d(dim, dim, kernel_size=1, bias=bias)
 
     def forward(self, x):
@@ -75,8 +72,8 @@ class Attention(nn.Module):
         qkv = self.qkv_dwconv(self.qkv(x))
         q, k, v = qkv.chunk(3, dim=1)
         q = q.reshape(b, self.num_heads, c // self.num_heads, h * w)
-        k = k.reshape(b, self.num_heads, c // self.num_heads, h* w)
-        v = v.reshape(b, self.num_heads, c // self.num_heads, h * w)
+        k = k.reshape(b, self.num_heads, c // self.num_heads, h*w)
+        v = v.reshape(b, self.num_heads, c // self.num_heads, h*w)
         q = F.normalize(q, dim=-1)
         k = F.normalize(k, dim=-1)
         attn = (q @ k.transpose(-2, -1)) * self.temperature
@@ -86,30 +83,21 @@ class Attention(nn.Module):
 
 
 class FeedForward(nn.Module):
-    def __init__(self, dim, ffn_expansion_factor, bias):
+    def __init__(self, dim, ffn_expansion_factor=2.66, bias=False):
         super().__init__()
-        hidden_features = int(dim * ffn_expansion_factor)
-        self.project_in = nn.Conv2d(dim, hidden_features * 2, kernel_size=1, bias=bias)
-        self.dwconv = nn.Conv2d(
-            hidden_features * 2,
-            hidden_features * 2,
-            kernel_size=3,
-            stride=1,
-            padding=1,
-            groups=hidden_features * 2,
-            bias=bias,
-        )
-        self.project_out = nn.Conv2d(hidden_features, dim, kernel_size=1, bias=bias)
+        hidden = int(dim * ffn_expansion_factor)
+        self.project_in = nn.Conv2d(dim, hidden * 2, kernel_size=1, bias=bias)
+        self.dwconv = nn.Conv2d(hidden * 2, hidden * 2, kernel_size=3, stride=1, padding=1, groups=hidden * 2, bias=bias)
+        self.project_out = nn.Conv2d(hidden, dim, kernel_size=1, bias=bias)
 
     def forward(self, x):
         x = self.project_in(x)
         x1, x2 = self.dwconv(x).chunk(2, dim=1)
-        x = F.gelu(x1) * x2
-        return self.project_out(x)
+        return self.project_out(F.gelu(x1) * x2)
 
 
 class TransformerBlock(nn.Module):
-    def __init__(self, dim, num_heads, ffn_expansion_factor, bias, LayerNorm_type):
+    def __init__(self, dim, num_heads, ffn_expansion_factor=2.66, bias=False, LayerNorm_type="WithBias"):
         super().__init__()
         self.norm1 = LayerNorm(dim, LayerNorm_type)
         self.attn = Attention(dim, num_heads, bias)
@@ -136,7 +124,7 @@ class DownSample(nn.Module):
         super().__init__()
         self.body = nn.Sequential(
             nn.Conv2d(n_feat, n_feat // 2, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.PixelUnshuffle(2),
+            nn.PixelUnshuffle(2)
         )
 
     def forward(self, x):
@@ -148,7 +136,7 @@ class UpSample(nn.Module):
         super().__init__()
         self.body = nn.Sequential(
             nn.Conv2d(n_feat, n_feat * 2, kernel_size=3, stride=1, padding=1, bias=False),
-            nn.PixelShuffle(2),
+            nn.PixelShuffle(2)
         )
 
     def forward(self, x):
@@ -156,150 +144,37 @@ class UpSample(nn.Module):
 
 
 class Restormer(nn.Module):
-    def __init__(
-        self,
-        inp_channels=1,
-        out_channels=1,
-        dim=48,
-        num_blocks=[4, 6, 6, 8],
-        num_refinement_blocks=4,
-        heads=[1, 2, 4, 8],
-        ffn_expansion_factor=2.66,
-        bias=False,
-        LayerNorm_type="WithBias",
-        dual_pixel_task=False,
-    ):
+    """Restormer architecture matching the trained model weights."""
+    def __init__(self, inp_channels=1, out_channels=1, dim=48, num_blocks=[4, 6, 6, 8], heads=[1, 2, 4, 8], ffn_expansion_factor=2.66, bias=False, LayerNorm_type="WithBias"):
         super().__init__()
         self.patch_embed = OverlapPatchEmbed(inp_channels, dim, bias)
-        self.encoder_level1 = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=dim,
-                    num_heads=heads[0],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_blocks[0])
-            ]
-        )
+        self.encoder_level1 = nn.Sequential(*[TransformerBlock(dim, heads[0], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(num_blocks[0])])
         self.down1_2 = DownSample(dim)
-        self.encoder_level2 = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=int(dim * 2**1),
-                    num_heads=heads[1],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_blocks[1])
-            ]
-        )
-        self.down2_3 = DownSample(int(dim * 2**1))
-        self.encoder_level3 = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=int(dim * 2**2),
-                    num_heads=heads[2],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_blocks[2])
-            ]
-        )
-        self.down3_4 = DownSample(int(dim * 2**2))
-        self.latent = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=int(dim * 2**3),
-                    num_heads=heads[3],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_blocks[3])
-            ]
-        )
-        self.up4_3 = UpSample(int(dim * 2**3))
-        self.reduce_chan_level3 = nn.Conv2d(int(dim * 2**3), int(dim * 2**2), kernel_size=1, bias=bias)
-        self.decoder_level3 = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=int(dim * 2**2),
-                    num_heads=heads[2],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_blocks[2])
-            ]
-        )
-        self.up3_2 = UpSample(int(dim * 2**2))
-        self.reduce_chan_level2 = nn.Conv2d(int(dim * 2**2), int(dim * 2**1), kernel_size=1, bias=bias)
-        self.decoder_level2 = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=int(dim * 2**1),
-                    num_heads=heads[1],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_blocks[1])
-            ]
-        )
-        self.up2_1 = UpSample(int(dim * 2**1))
-        self.decoder_level1 = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=int(dim * 2**1),
-                    num_heads=heads[0],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_blocks[0])
-            ]
-        )
-        self.refinement = nn.Sequential(
-            *[
-                TransformerBlock(
-                    dim=int(dim * 2**1),
-                    num_heads=heads[0],
-                    ffn_expansion_factor=ffn_expansion_factor,
-                    bias=bias,
-                    LayerNorm_type=LayerNorm_type,
-                )
-                for _ in range(num_refinement_blocks)
-            ]
-        )
-        self.output = nn.Conv2d(int(dim * 2**1), out_channels, kernel_size=3, stride=1, padding=1, bias=bias)
+        self.encoder_level2 = nn.Sequential(*[TransformerBlock(dim * 2, heads[1], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(num_blocks[1])])
+        self.down2_3 = DownSample(dim * 2)
+        self.encoder_level3 = nn.Sequential(*[TransformerBlock(dim * 4, heads[2], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(num_blocks[2])])
+        self.down3_4 = DownSample(dim * 4)
+        self.latent = nn.Sequential(*[TransformerBlock(dim * 8, heads[3], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(num_blocks[3])])
+        self.up4_3 = UpSample(dim * 8)
+        self.reduce_chan_level3 = nn.Conv2d(dim * 8, dim * 4, 1, bias=bias)
+        self.decoder_level3 = nn.Sequential(*[TransformerBlock(dim * 4, heads[2], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(num_blocks[2])])
+        self.up3_2 = UpSample(dim * 4)
+        self.reduce_chan_level2 = nn.Conv2d(dim * 4, dim * 2, 1, bias=bias)
+        self.decoder_level2 = nn.Sequential(*[TransformerBlock(dim * 2, heads[1], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(num_blocks[1])])
+        self.up2_1 = UpSample(dim * 2)
+        self.decoder_level1 = nn.Sequential(*[TransformerBlock(dim * 2, heads[0], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(num_blocks[0])])
+        self.refinement = nn.Sequential(*[TransformerBlock(dim * 2, heads[0], ffn_expansion_factor, bias, LayerNorm_type) for _ in range(4)])
+        self.output = nn.Conv2d(dim * 2, out_channels, 3, 1, 1, bias=bias)
 
     def forward(self, inp_img):
-        inp_enc_level1 = self.patch_embed(inp_img)
-        out_enc_level1 = self.encoder_level1(inp_enc_level1)
-        inp_enc_level2 = self.down1_2(out_enc_level1)
-        out_enc_level2 = self.encoder_level2(inp_enc_level2)
-        inp_enc_level3 = self.down2_3(out_enc_level2)
-        out_enc_level3 = self.encoder_level3(inp_enc_level3)
-        inp_latent = self.down3_4(out_enc_level3)
-        out_latent = self.latent(inp_latent)
-        inp_dec_level3 = self.up4_3(out_latent)
-        inp_dec_level3 = torch.cat([inp_dec_level3, out_enc_level3], 1)
-        inp_dec_level3 = self.reduce_chan_level3(inp_dec_level3)
-        out_dec_level3 = self.decoder_level3(inp_dec_level3)
-        inp_dec_level2 = self.up3_2(out_dec_level3)
-        inp_dec_level2 = torch.cat([inp_dec_level2, out_enc_level2], 1)
-        inp_dec_level2 = self.reduce_chan_level2(inp_dec_level2)
-        out_dec_level2 = self.decoder_level2(inp_dec_level2)
-        inp_dec_level1 = self.up2_1(out_dec_level2)
-        inp_dec_level1 = torch.cat([inp_dec_level1, out_enc_level1], 1)
-        out_dec_level1 = self.decoder_level1(inp_dec_level1)
-        out_dec_level1 = self.refinement(out_dec_level1)
-        out_dec_level1 = self.output(out_dec_level1) + inp_img
-        return out_dec_level1
+        e1 = self.encoder_level1(self.patch_embed(inp_img))
+        e2 = self.encoder_level2(self.down1_2(e1))
+        e3 = self.encoder_level3(self.down2_3(e2))
+        lat = self.latent(self.down3_4(e3))
+        d3 = self.decoder_level3(self.reduce_chan_level3(torch.cat([self.up4_3(lat), e3], 1)))
+        d2 = self.decoder_level2(self.reduce_chan_level2(torch.cat([self.up3_2(d3), e2], 1)))
+        d1 = self.decoder_level1(torch.cat([self.up2_1(d2), e1], 1))
+        return self.output(self.refinement(d1)) + inp_img
 
 
 # Alias for backward compatibility

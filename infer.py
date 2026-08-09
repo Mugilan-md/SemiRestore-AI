@@ -1,25 +1,17 @@
 """
-SemiRestoreNet — Standalone Evaluation Script
-=============================================
+SemiRestoreNet (Restormer) — Standalone Evaluation Script
+=========================================================
 SEMICON India Hackathon 2026 | Problem: AI-Based Restoration of Degraded SEM Images
-Sponsored by KLA Corporation
+Sponsored by KLA Corporation & Applied Materials
 
-USAGE (exactly as required by the hackathon spec):
+USAGE (matches hackathon benchmark spec):
     python infer.py --test-dir /path/to/test/images --out-dir /path/to/output
 
 Arguments:
     --test-dir   Path to directory containing degraded input images (.png / .tif / .jpg)
     --out-dir    Path to directory where restored images will be written
-    --ckpt       (optional) Path to model checkpoint. Default: checkpoints/best.pt
+    --ckpt       (optional) Path to model checkpoint. Default: checkpoints/best_model.pth (or best.pt)
     --onnx       (optional) Use ONNX model instead of PyTorch. Default: checkpoints/semirestore.onnx
-
-This script:
-  1. Loads the trained SemiRestoreNet model (PyTorch .pt OR ONNX .onnx)
-  2. Runs inference on ALL images in --test-dir
-  3. Writes restored images to --out-dir with the SAME filename
-  4. Prints per-image inference time and a summary
-
-It runs WITHOUT manual edits — tested on a clean machine.
 """
 
 import argparse
@@ -53,7 +45,8 @@ def save_float_image(arr: np.ndarray, path: Path) -> None:
 def run_pytorch(ckpt_path: Path, test_dir: Path, out_dir: Path):
     try:
         import torch
-        from model.network import SemiRestoreNet
+        import torch.nn.functional as F
+        from model.network import Restormer
     except ImportError as e:
         print(f"[ERROR] Cannot import torch or model: {e}")
         print("Install with: pip install torch torchvision")
@@ -62,7 +55,7 @@ def run_pytorch(ckpt_path: Path, test_dir: Path, out_dir: Path):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"[INFO] Using device: {device}")
 
-    model = SemiRestoreNet()
+    model = Restormer(inp_channels=1, out_channels=1).to(device)
     checkpoint = torch.load(str(ckpt_path), map_location=device)
     if isinstance(checkpoint, dict) and "model_state_dict" in checkpoint:
         state = checkpoint["model_state_dict"]
@@ -70,9 +63,9 @@ def run_pytorch(ckpt_path: Path, test_dir: Path, out_dir: Path):
         state = checkpoint["state_dict"]
     else:
         state = checkpoint
+
     model.load_state_dict(state)
     model.eval()
-    model.to(device)
     print(f"[INFO] Loaded checkpoint: {ckpt_path}")
 
     images = sorted([p for p in test_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXT])
@@ -82,66 +75,35 @@ def run_pytorch(ckpt_path: Path, test_dir: Path, out_dir: Path):
 
     print(f"[INFO] Found {len(images)} images. Running inference...")
     times = []
-    for img_path in images:
-        arr = load_image_as_float(img_path)
-        t = torch.from_numpy(arr).unsqueeze(0).unsqueeze(0).to(device)  # [1,1,H,W]
+    with torch.no_grad():
+        for img_path in images:
+            arr = load_image_as_float(img_path)
+            h, w = arr.shape
+            tensor = torch.from_numpy(arr).unsqueeze(0).unsqueeze(0).to(device)
 
-        with torch.no_grad():
-            # warmup
-            _ = model(t)
+            # Pad to multiple of 8 for Restormer downsampling
+            pad_h = (8 - h % 8) % 8
+            pad_w = (8 - w % 8) % 8
+            if pad_h > 0 or pad_w > 0:
+                tensor = F.pad(tensor, (0, pad_w, 0, pad_h), mode="reflect")
+
+            # Warmup
+            _ = model(tensor)
+
             t0 = time.perf_counter()
-            out = model(t)
+            out = model(tensor)
             elapsed_ms = (time.perf_counter() - t0) * 1000
 
-        out_arr = out.squeeze().cpu().numpy()
-        out_path = out_dir / img_path.name
-        save_float_image(out_arr, out_path)
-        times.append(elapsed_ms)
-        print(f"  [{elapsed_ms:6.1f} ms] {img_path.name} → {out_path.name}")
+            if pad_h > 0 or pad_w > 0:
+                out = out[:, :, :h, :w]
 
-    print(f"\n[RESULT] {len(images)} images restored → {out_dir}")
-    print(f"[RESULT] Avg inference time: {sum(times)/len(times):.1f} ms/image")
-    print(f"[RESULT] Min: {min(times):.1f} ms  Max: {max(times):.1f} ms")
+            out_arr = out.squeeze().cpu().numpy()
+            out_path = out_dir / img_path.name
+            save_float_image(out_arr, out_path)
+            times.append(elapsed_ms)
+            print(f"  [{elapsed_ms:6.1f} ms] {img_path.name} -> {out_path.name}")
 
-
-# ── ONNX inference (no PyTorch required at runtime) ──────────────────────────
-def run_onnx(onnx_path: Path, test_dir: Path, out_dir: Path):
-    try:
-        import onnxruntime as ort
-    except ImportError:
-        print("[ERROR] onnxruntime not installed. Run: pip install onnxruntime")
-        sys.exit(1)
-
-    providers = ["CUDAExecutionProvider", "CPUExecutionProvider"]
-    session = ort.InferenceSession(str(onnx_path), providers=providers)
-    input_name = session.get_inputs()[0].name
-    output_name = session.get_outputs()[0].name
-    print(f"[INFO] Loaded ONNX model: {onnx_path}")
-    print(f"[INFO] Provider: {session.get_providers()[0]}")
-
-    images = sorted([p for p in test_dir.iterdir() if p.suffix.lower() in SUPPORTED_EXT])
-    if not images:
-        print(f"[ERROR] No images found in {test_dir}")
-        sys.exit(1)
-
-    print(f"[INFO] Found {len(images)} images. Running ONNX inference...")
-    times = []
-    for img_path in images:
-        arr = load_image_as_float(img_path)[None, None, :, :]  # [1,1,H,W]
-
-        # warmup
-        session.run([output_name], {input_name: arr})
-        t0 = time.perf_counter()
-        result = session.run([output_name], {input_name: arr})
-        elapsed_ms = (time.perf_counter() - t0) * 1000
-
-        out_arr = result[0].squeeze()  # [H,W]
-        out_path = out_dir / img_path.name
-        save_float_image(out_arr, out_path)
-        times.append(elapsed_ms)
-        print(f"  [{elapsed_ms:6.1f} ms] {img_path.name} → {out_path.name}")
-
-    print(f"\n[RESULT] {len(images)} images restored → {out_dir}")
+    print(f"\n[RESULT] {len(images)} images restored -> {out_dir}")
     print(f"[RESULT] Avg inference time: {sum(times)/len(times):.1f} ms/image")
 
 
@@ -159,12 +121,8 @@ def main():
         help="Path to directory where restored images will be written"
     )
     ap.add_argument(
-        "--ckpt", default="checkpoints/best.pt",
-        help="Path to PyTorch checkpoint (default: checkpoints/best.pt)"
-    )
-    ap.add_argument(
-        "--onnx", default=None,
-        help="Path to ONNX model file. If provided, uses ONNX runtime instead of PyTorch."
+        "--ckpt", default="checkpoints/best_model.pth",
+        help="Path to PyTorch checkpoint (default: checkpoints/best_model.pth or checkpoints/best.pt)"
     )
     args = ap.parse_args()
 
@@ -177,19 +135,16 @@ def main():
 
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    if args.onnx:
-        onnx_path = Path(args.onnx)
-        if not onnx_path.exists():
-            print(f"[ERROR] ONNX file not found: {onnx_path}")
-            sys.exit(1)
-        run_onnx(onnx_path, test_dir, out_dir)
-    else:
-        ckpt_path = Path(args.ckpt)
-        if not ckpt_path.exists():
-            print(f"[ERROR] Checkpoint not found: {ckpt_path}")
-            print("Tip: Download from the Google Drive link in README.md or use --onnx flag")
-            sys.exit(1)
-        run_pytorch(ckpt_path, test_dir, out_dir)
+    ckpt_path = Path(args.ckpt)
+    if not ckpt_path.exists() and Path("checkpoints/best.pt").exists():
+        ckpt_path = Path("checkpoints/best.pt")
+
+    if not ckpt_path.exists():
+        print(f"[ERROR] Checkpoint not found: {ckpt_path}")
+        print("Tip: Download best_model.pth from Google Drive link in README.md")
+        sys.exit(1)
+
+    run_pytorch(ckpt_path, test_dir, out_dir)
 
 
 if __name__ == "__main__":
