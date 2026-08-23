@@ -1,9 +1,8 @@
 # SemiRestore.AI — AI-Based Restoration of Degraded Semiconductor Images
 
-[![Live Web Application](https://img.shields.io/badge/Live%20App-Vercel%20Production-80A8FF?style=for-the-badge&logo=vercel&logoColor=white)](https://semirestore-ai.vercel.app/)
-[![Google Colab GPU T4](https://img.shields.io/badge/Google%20Colab-GPU%20T4%20Notebook-F9AB00?style=for-the-badge&logo=googlecolab&logoColor=white)](https://colab.research.google.com/drive/1B7xNmDLNU8NaZrXY1KEy3jNJZcaAOh19?usp=drive_link)
-[![Demonstration Video](https://img.shields.io/badge/Demo%20Video-Google%20Drive-34A853?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1s-f2FqNILJzSWFGeqosAJpr7QCAxGOqs/view?usp=drivesdk)
-[![Hackathon](https://img.shields.io/badge/SEMICON%20India%202026-KLA%20%26%20Applied%20Materials-0F62FE?style=for-the-badge)](https://semiconindia.org)
+[![Live Web App](https://img.shields.io/badge/🌐_Live_Web_App-80A8FF?style=for-the-badge)](https://semirestore-ai.vercel.app/)
+[![Demo Video](https://img.shields.io/badge/🎥_Demo_Video-238636?style=for-the-badge)](https://drive.google.com/file/d/1s-f2FqNILJzSWFGeqosAJpr7QCAxGOqs/view?usp=drivesdk)
+[![SEMICON India 2026](https://img.shields.io/badge/🏆_SEMICON_India_2026-0F62FE?style=for-the-badge)](https://semiconindia.org)
 
 > **SEMICON India Hackathon 2026**  
 > **Problem Statement:** AI-Based Restoration of Degraded Images for Semiconductor Inspection  
@@ -17,8 +16,7 @@
 **SemiRestore.AI** is an end-to-end, sub-nanometer metrology restoration platform engineered specifically for Scanning Electron Microscope (SEM) semiconductor images. It solves joint speckle denoising, super-resolution ($2\times/4\times$), and critical edge preservation without introducing artificial ringing, hallucinations, or blurring.
 
 * 🌐 **Live Web Application:** [https://semirestore-ai.vercel.app/](https://semirestore-ai.vercel.app/)
-* 📓 **Colab Training & Verification Notebook:** [Open in Google Colab](https://colab.research.google.com/drive/1B7xNmDLNU8NaZrXY1KEy3jNJZcaAOh19?usp=drive_link)
-* 🎥 **Demonstration Video:** [Watch Demonstration](https://drive.google.com/file/d/1s-f2FqNILJzSWFGeqosAJpr7QCAxGOqs/view?usp=drivesdk)
+* 🎥 **Demonstration Video:** [Watch Demonstration Video](https://drive.google.com/file/d/1s-f2FqNILJzSWFGeqosAJpr7QCAxGOqs/view?usp=drivesdk)
 
 ---
 
