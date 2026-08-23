@@ -53,6 +53,14 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
   const noisyCanvasRef = useRef<HTMLCanvasElement>(null);
   const restoredCanvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Dedicated slider canvases
+  const sliderNoisyCanvasRef = useRef<HTMLCanvasElement>(null);
+  const sliderRestoredCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Dedicated split canvases
+  const splitNoisyCanvasRef = useRef<HTMLCanvasElement>(null);
+  const splitRestoredCanvasRef = useRef<HTMLCanvasElement>(null);
+
   // Render HTML5 Canvas Patterns for current sample
   useEffect(() => {
     const width = 600;
@@ -66,21 +74,44 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
       ? 'void'
       : 'die';
 
+    // 1. Triple View
     if (origCanvasRef.current) {
       origCanvasRef.current.width = width;
       origCanvasRef.current.height = height;
       const ctx = origCanvasRef.current.getContext('2d');
       if (ctx) drawSemiconPattern(ctx, width, height, patternType);
     }
-
     if (origCanvasRef.current && noisyCanvasRef.current) {
       addSyntheticSemNoise(origCanvasRef.current, noisyCanvasRef.current, 0.45);
     }
-
     if (noisyCanvasRef.current && restoredCanvasRef.current) {
       applyRestormerAI(noisyCanvasRef.current, restoredCanvasRef.current);
     }
-  }, [sample]);
+
+    // 2. Slider View
+    if (sliderNoisyCanvasRef.current && sliderRestoredCanvasRef.current) {
+      const tempOrig = document.createElement('canvas');
+      tempOrig.width = width;
+      tempOrig.height = height;
+      const ctx = tempOrig.getContext('2d');
+      if (ctx) drawSemiconPattern(ctx, width, height, patternType);
+
+      addSyntheticSemNoise(tempOrig, sliderNoisyCanvasRef.current, 0.45);
+      applyRestormerAI(sliderNoisyCanvasRef.current, sliderRestoredCanvasRef.current);
+    }
+
+    // 3. Split View
+    if (splitNoisyCanvasRef.current && splitRestoredCanvasRef.current) {
+      const tempOrig = document.createElement('canvas');
+      tempOrig.width = width;
+      tempOrig.height = height;
+      const ctx = tempOrig.getContext('2d');
+      if (ctx) drawSemiconPattern(ctx, width, height, patternType);
+
+      addSyntheticSemNoise(tempOrig, splitNoisyCanvasRef.current, 0.45);
+      applyRestormerAI(splitNoisyCanvasRef.current, splitRestoredCanvasRef.current);
+    }
+  }, [sample, layout]);
 
   // Handle Pan & Zoom
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -311,16 +342,52 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
 
         {/* Before/After Interactive Slider Mode */}
         {layout === 'slider' && (
-          <div className="moondust-glass-dark rounded-3xl p-6 border border-[#CEB5FF] text-white relative">
+          <div className="moondust-glass-dark rounded-3xl p-6 border border-[#CEB5FF] text-white relative shadow-2xl">
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-800 text-xs font-bold">
-              <span className="text-amber-300">Left: Degraded Noisy Scan</span>
-              <span className="text-gold-glitter font-black">Right: Restormer Restored Output</span>
+              <span className="text-amber-300 flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
+                Left: Degraded Raw SEM Scan (Speckle Noise)
+              </span>
+              <span className="text-gold-glitter font-black flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-amber-400" />
+                Right: Restormer AI Restored Output
+              </span>
             </div>
 
-            <div className="relative w-full h-[400px] rounded-2xl overflow-hidden bg-slate-950 select-none border border-slate-800">
-              {/* Restored background canvas */}
+            <div className="relative w-full h-[450px] rounded-2xl overflow-hidden bg-slate-950 select-none border border-slate-800 flex items-center justify-center">
+              {/* Bottom Layer: Restored Canvas (Right side) */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <canvas ref={restoredCanvasRef} className="max-w-full max-h-full" />
+                <canvas
+                  ref={sliderRestoredCanvasRef}
+                  className="max-w-full max-h-full"
+                  style={{
+                    transform: `scale(${zoomLevel}) translate(${panPos.x}px, ${panPos.y}px)`,
+                  }}
+                />
+              </div>
+
+              {/* Top Layer: Degraded Canvas (Left side, clipped with inset) */}
+              <div
+                className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                style={{
+                  clipPath: `inset(0 ${100 - sliderPos}% 0 0)`,
+                }}
+              >
+                <canvas
+                  ref={sliderNoisyCanvasRef}
+                  className="max-w-full max-h-full"
+                  style={{
+                    transform: `scale(${zoomLevel}) translate(${panPos.x}px, ${panPos.y}px)`,
+                  }}
+                />
+              </div>
+
+              {/* Badges on left & right */}
+              <div className="absolute top-4 left-4 z-20 pointer-events-none bg-slate-900/85 backdrop-blur-md border border-amber-400/50 px-3 py-1 rounded-lg text-[11px] font-bold text-amber-300 shadow-md">
+                DEGRADED (RAW SCAN)
+              </div>
+              <div className="absolute top-4 right-4 z-20 pointer-events-none bg-slate-900/85 backdrop-blur-md border border-[#80A8FF]/50 px-3 py-1 rounded-lg text-[11px] font-bold text-gold-glitter shadow-md">
+                AI RESTORED (PSNR {sample.metrics.psnr} dB)
               </div>
 
               {/* Slider Input overlay control */}
@@ -330,15 +397,15 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
                 max="100"
                 value={sliderPos}
                 onChange={(e) => setSliderPos(Number(e.target.value))}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-40"
               />
 
-              {/* Slider Divider Bar */}
+              {/* Slider Divider Bar with glowing line & drag handle */}
               <div
-                className="absolute top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#80A8FF] via-[#CEB5FF] to-[#8EC1DE] shadow-[0_0_12px_#80A8FF] z-20 pointer-events-none"
+                className="absolute top-0 bottom-0 w-1 bg-gradient-to-b from-[#80A8FF] via-white to-[#CEB5FF] shadow-[0_0_16px_#80A8FF] z-30 pointer-events-none"
                 style={{ left: `${sliderPos}%` }}
               >
-                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-8 w-8 rounded-full bg-slate-900 text-gold-glitter border-2 border-white shadow-lg flex items-center justify-center text-xs font-black">
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-9 w-9 rounded-full bg-slate-900 text-amber-300 border-2 border-white shadow-2xl flex items-center justify-center text-xs font-black ring-4 ring-[#80A8FF]/40">
                   ↔
                 </div>
               </div>
@@ -348,17 +415,27 @@ export const ComparisonWorkspace: React.FC<ComparisonWorkspaceProps> = ({
 
         {/* Split Screen Mode */}
         {layout === 'split' && (
-          <div className="grid grid-cols-2 gap-4">
-            <div className="moondust-glass-dark rounded-3xl p-4 border border-slate-800 text-white">
-              <div className="text-xs font-bold text-amber-300 mb-2">Noisy SEM Scan</div>
-              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl border border-slate-800">
-                <canvas ref={noisyCanvasRef} className="max-w-full max-h-full" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="moondust-glass-dark rounded-3xl p-4 border border-amber-400/40 text-white">
+              <div className="text-xs font-bold text-amber-300 mb-2">Degraded Noisy SEM Scan</div>
+              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden">
+                <canvas
+                  ref={splitNoisyCanvasRef}
+                  className="max-w-full max-h-full"
+                  style={{ transform: `scale(${zoomLevel}) translate(${panPos.x}px, ${panPos.y}px)` }}
+                />
               </div>
             </div>
             <div className="moondust-glass-dark rounded-3xl p-4 border border-[#80A8FF] text-white">
-              <div className="text-xs font-black text-gold-glitter mb-2">Restormer AI Restored</div>
-              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl border border-slate-800">
-                <canvas ref={restoredCanvasRef} className="max-w-full max-h-full" />
+              <div className="text-xs font-black text-gold-glitter mb-2 flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-amber-400" /> Restormer AI Restored
+              </div>
+              <div className="h-[360px] flex items-center justify-center bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden">
+                <canvas
+                  ref={splitRestoredCanvasRef}
+                  className="max-w-full max-h-full"
+                  style={{ transform: `scale(${zoomLevel}) translate(${panPos.x}px, ${panPos.y}px)` }}
+                />
               </div>
             </div>
           </div>
