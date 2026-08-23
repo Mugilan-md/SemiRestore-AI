@@ -1,21 +1,32 @@
 import sys
-import pptx
 import pathlib
 import time
 import os
 import shutil
-import comtypes.client
-from pptx.util import Inches, Pt
-from pptx.dml.color import RGBColor
+
+try:
+    import pptx  # type: ignore
+    from pptx.util import Pt  # type: ignore
+    from pptx.dml.color import RGBColor  # type: ignore
+except ImportError:
+    pptx = None  # type: ignore
+    Pt = None  # type: ignore
+    RGBColor = None  # type: ignore
+
+try:
+    import comtypes.client  # type: ignore
+except ImportError:
+    comtypes = None  # type: ignore
 
 # Configure UTF-8 encoding
-sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding='utf-8')
 
 VIDEO_URL = "https://drive.google.com/file/d/1s-f2FqNILJzSWFGeqosAJpr7QCAxGOqs/view?usp=drivesdk"
 
-TEXT_WHITE = RGBColor(240, 246, 252)
-ACCENT_GREEN = RGBColor(63, 185, 80)
-LINK_CYAN = RGBColor(88, 166, 255)
+TEXT_WHITE = RGBColor(240, 246, 252) if RGBColor else None
+ACCENT_GREEN = RGBColor(63, 185, 80) if RGBColor else None
+LINK_CYAN = RGBColor(88, 166, 255) if RGBColor else None
 
 def update_presentation(pptx_file):
     p_path = pathlib.Path(pptx_file).resolve()
