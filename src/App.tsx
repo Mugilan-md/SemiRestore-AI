@@ -32,6 +32,35 @@ export function App() {
     setActiveTab('workspace');
   };
 
+  const navigateToModule = (
+    tab: ActiveTab,
+    options?: {
+      viewMode?: ViewMode;
+      showDefects?: boolean;
+      scrollToId?: string;
+    }
+  ) => {
+    if (options?.viewMode) {
+      setViewMode(options.viewMode);
+    }
+    if (options?.showDefects !== undefined) {
+      setShowDefects(options.showDefects);
+    }
+    setActiveTab(tab);
+    if (options?.scrollToId) {
+      setTimeout(() => {
+        const el = document.getElementById(options.scrollToId!);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 100);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <AuthProvider>
     <div className="min-h-screen bg-moondust-mesh text-slate-900 flex flex-col font-sans selection:bg-[#CEB5FF] selection:text-slate-900 relative">
@@ -51,7 +80,12 @@ export function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 pb-16 relative z-10">
-        {activeTab === 'landing' && <LandingPage setActiveTab={setActiveTab} />}
+        {activeTab === 'landing' && (
+          <LandingPage
+            setActiveTab={setActiveTab}
+            onNavigateModule={navigateToModule}
+          />
+        )}
 
         {activeTab === 'dashboard' && (
           <EnterpriseDashboard
@@ -63,54 +97,64 @@ export function App() {
         {activeTab === 'workspace' && (
           <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto space-y-8">
             {/* Quick Upload Banner */}
-            <UploadModule
-              onSampleSelected={handleSampleSelected}
-              onCustomImageUploaded={handleCustomImageUploaded}
-            />
+            <div id="workspace-upload">
+              <UploadModule
+                onSampleSelected={handleSampleSelected}
+                onCustomImageUploaded={handleCustomImageUploaded}
+              />
+            </div>
 
             {/* Synchronized Multi-Viewer Workspace */}
-            <ComparisonWorkspace
-              sample={currentSample}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-              showDefects={showDefects}
-              setShowDefects={setShowDefects}
-              onGenerateReport={() => setActiveTab('report')}
-            />
+            <div id="workspace-viewer">
+              <ComparisonWorkspace
+                sample={currentSample}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
+                showDefects={showDefects}
+                setShowDefects={setShowDefects}
+                onGenerateReport={() => setActiveTab('report')}
+              />
+            </div>
 
             {/* Quantitative Quality Metrics Panel */}
-            <QualityMetricsPanel metrics={currentSample.metrics} />
+            <div id="workspace-metrics">
+              <QualityMetricsPanel metrics={currentSample.metrics} />
+            </div>
 
             {/* Heatmap & Spectral Diagnostic Layer */}
-            <HeatmapViewer
-              sample={currentSample}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-            />
+            <div id="workspace-heatmaps">
+              <HeatmapViewer
+                sample={currentSample}
+                viewMode={viewMode}
+                setViewMode={setViewMode}
+              />
+            </div>
 
             {/* AI Defect Assistance Overlay */}
-            <DefectAssistanceOverlay
-              defects={currentSample.defects}
-              showDefects={showDefects}
-              setShowDefects={setShowDefects}
-            />
+            <div id="workspace-defects">
+              <DefectAssistanceOverlay
+                defects={currentSample.defects}
+                showDefects={showDefects}
+                setShowDefects={setShowDefects}
+              />
+            </div>
           </div>
         )}
 
         {activeTab === 'pipeline' && (
-          <div className="p-4 sm:p-6 lg:p-8">
+          <div id="batch-pipeline-monitor" className="p-4 sm:p-6 lg:p-8">
             <LivePipelineMonitor />
           </div>
         )}
 
         {activeTab === 'report' && (
-          <div className="p-4 sm:p-6 lg:p-8">
+          <div id="inspection-report-view" className="p-4 sm:p-6 lg:p-8">
             <InspectionReportView sample={currentSample} />
           </div>
         )}
 
         {activeTab === 'history' && (
-          <div className="p-4 sm:p-6 lg:p-8">
+          <div id="recent-history-table" className="p-4 sm:p-6 lg:p-8">
             <RecentHistoryTable onSelectSample={handleSampleSelected} />
           </div>
         )}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ActiveTab } from '../../types/semicon';
+import { ActiveTab, ViewMode } from '../../types/semicon';
 import {
   Sparkles,
   ArrowRight,
@@ -23,10 +23,41 @@ import { motion } from 'framer-motion';
 
 interface LandingPageProps {
   setActiveTab: (tab: ActiveTab) => void;
+  onNavigateModule?: (
+    tab: ActiveTab,
+    options?: {
+      viewMode?: ViewMode;
+      showDefects?: boolean;
+      scrollToId?: string;
+    }
+  ) => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({
+  setActiveTab,
+  onNavigateModule,
+}) => {
   const [showDemoModal, setShowDemoModal] = useState(false);
+
+  const handleNavigate = (
+    tab: ActiveTab,
+    options?: {
+      viewMode?: ViewMode;
+      showDefects?: boolean;
+      scrollToId?: string;
+    }
+  ) => {
+    if (onNavigateModule) {
+      onNavigateModule(tab, options);
+    } else {
+      setActiveTab(tab);
+      if (options?.scrollToId) {
+        setTimeout(() => {
+          document.getElementById(options.scrollToId!)?.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  };
 
   const features = [
     {
@@ -34,56 +65,77 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
       desc: 'Removes Poisson shot noise and SEM detector speckle while preserving 2nm sub-gate feature boundaries.',
       icon: Layers,
       highlight: '98.6% SNR Gain',
+      tab: 'workspace' as ActiveTab,
+      viewMode: 'restored' as ViewMode,
+      scrollToId: 'workspace-viewer',
     },
     {
       title: 'Super Resolution 4x',
       desc: 'Transformer-based upscaling expands 1024x1024 die scans to 4096x4096 nanometer fidelity.',
       icon: ZoomIn,
       highlight: 'SwinIR & Restormer',
+      tab: 'workspace' as ActiveTab,
+      viewMode: 'restored' as ViewMode,
+      scrollToId: 'workspace-viewer',
     },
     {
       title: 'Quality Metrics',
       desc: 'Real-time computation of PSNR (+15.6 dB), SSIM (0.99), and contrast modulation transfer function.',
       icon: BarChart3,
       highlight: 'Sub-ms Metrology',
+      tab: 'workspace' as ActiveTab,
+      scrollToId: 'workspace-metrics',
     },
     {
       title: 'Batch Processing',
       desc: 'Simultaneous ingestion and AI restoration of 100+ 300mm wafer cassette inspection logs.',
       icon: Database,
       highlight: 'Parallel GPU Ingestion',
+      tab: 'pipeline' as ActiveTab,
+      scrollToId: 'batch-pipeline-monitor',
     },
     {
       title: 'Microscopic Zoom 1000x',
       desc: 'Smooth canvas pan and zoom up to 1000x scale with crosshair pixel luminance diagnostics.',
       icon: Microscope,
       highlight: 'Nanometer Scale',
+      tab: 'workspace' as ActiveTab,
+      viewMode: 'restored' as ViewMode,
+      scrollToId: 'workspace-viewer',
     },
     {
       title: 'AI Defect Assistance',
       desc: 'Automated detection of pin-holes, line breaks, voids, CMP scratches, and particle contamination.',
       icon: ShieldCheck,
       highlight: '99.4% Precision',
+      tab: 'workspace' as ActiveTab,
+      showDefects: true,
+      scrollToId: 'workspace-defects',
     },
     {
       title: 'Fast GPU Processing',
       desc: 'FP16 TensorRT pipeline executes 148+ high-resolution frames per second on NVIDIA H100.',
       icon: Zap,
       highlight: '< 18ms Inference',
+      tab: 'pipeline' as ActiveTab,
+      scrollToId: 'batch-pipeline-monitor',
     },
     {
       title: 'Explainable AI Heatmaps',
       desc: 'Difference error heatmaps, Sobel edge maps, and spatial attention weight visualizations.',
       icon: Activity,
       highlight: 'Attention Weight Maps',
+      tab: 'workspace' as ActiveTab,
+      viewMode: 'heatmap' as ViewMode,
+      scrollToId: 'workspace-heatmaps',
     },
   ];
 
   const workflow = [
-    { step: '01', title: 'Upload & Ingest', text: 'Drag-and-drop raw 16-bit SEM TIFF/PNG wafer die scans.', icon: UploadCloud },
-    { step: '02', title: 'AI Restoration', text: 'Restormer transformer denoising & 4x neural super-resolution.', icon: Cpu },
-    { step: '03', title: 'Quality Analysis', text: 'Automated computation of PSNR, SSIM, and AI defect bounding boxes.', icon: Activity },
-    { step: '04', title: 'Inspection Report', text: 'Instant executive PDF report generation with yield certification.', icon: FileCheck2 },
+    { step: '01', title: 'Upload & Ingest', text: 'Drag-and-drop raw 16-bit SEM TIFF/PNG wafer die scans.', icon: UploadCloud, tab: 'workspace' as ActiveTab, scrollToId: 'workspace-upload' },
+    { step: '02', title: 'AI Restoration', text: 'Restormer transformer denoising & 4x neural super-resolution.', icon: Cpu, tab: 'workspace' as ActiveTab, viewMode: 'restored' as ViewMode, scrollToId: 'workspace-viewer' },
+    { step: '03', title: 'Quality Analysis', text: 'Automated computation of PSNR, SSIM, and AI defect bounding boxes.', icon: Activity, tab: 'workspace' as ActiveTab, scrollToId: 'workspace-metrics' },
+    { step: '04', title: 'Inspection Report', text: 'Instant executive PDF report generation with yield certification.', icon: FileCheck2, tab: 'report' as ActiveTab },
   ];
 
   return (
@@ -275,22 +327,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
             return (
               <div
                 key={index}
-                className="moondust-glass rounded-2xl p-6 flex flex-col justify-between card-3d-tactile cursor-pointer"
+                onClick={() =>
+                  handleNavigate(feat.tab, {
+                    viewMode: feat.viewMode,
+                    showDefects: feat.showDefects,
+                    scrollToId: feat.scrollToId,
+                  })
+                }
+                className="moondust-glass rounded-2xl p-6 flex flex-col justify-between card-3d-tactile cursor-pointer group hover:border-[#80A8FF]/80 transition-all shadow-sm hover:shadow-md"
               >
                 <div>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#D3D3FF] to-[#CEB5FF]/50 border border-[#80A8FF]/40 flex items-center justify-center text-slate-900 shadow-xs">
+                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-[#D3D3FF] to-[#CEB5FF]/50 border border-[#80A8FF]/40 flex items-center justify-center text-slate-900 shadow-xs group-hover:scale-105 transition-transform">
                       <Icon className="h-6 w-6 text-[#80A8FF]" />
                     </div>
                     <span className="text-[10px] font-black uppercase tracking-wider badge-gold-glitter px-2.5 py-0.5 rounded-lg">
                       {feat.highlight}
                     </span>
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 mb-2">{feat.title}</h3>
+                  <h3 className="text-base font-bold text-slate-900 mb-2 group-hover:text-[#6C8BEB] transition-colors">{feat.title}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed font-medium">{feat.desc}</p>
                 </div>
-                <div className="mt-6 pt-3 border-t border-[#CEB5FF]/40 flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-[#80A8FF]">Explore Module &rarr;</span>
+
+                <div className="mt-5 pt-3 border-t border-[#CEB5FF]/30 flex items-center">
+                  <span className="text-xs font-semibold text-[#80A8FF] group-hover:text-[#5E83F0] flex items-center gap-1 transition-all">
+                    Explore Module &rarr;
+                  </span>
                 </div>
               </div>
             );
@@ -311,15 +373,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
           {workflow.map((w, idx) => {
             const Icon = w.icon;
             return (
-              <div key={idx} className="relative moondust-glass rounded-2xl p-6 border border-[#CEB5FF] card-3d-tactile cursor-pointer">
+              <div
+                key={idx}
+                onClick={() =>
+                  handleNavigate(w.tab, {
+                    viewMode: w.viewMode,
+                    scrollToId: w.scrollToId,
+                  })
+                }
+                className="relative moondust-glass rounded-2xl p-6 border border-[#CEB5FF] card-3d-tactile cursor-pointer group hover:border-[#80A8FF]/80 transition-all"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-2xl font-black text-gold-glitter font-cinzel">{w.step}</span>
-                  <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-[#80A8FF] to-[#CEB5FF] text-white flex items-center justify-center shadow-md shadow-[#80A8FF]/20">
+                  <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-[#80A8FF] to-[#CEB5FF] text-white flex items-center justify-center shadow-md shadow-[#80A8FF]/20 group-hover:scale-105 transition-transform">
                     <Icon className="h-5 w-5" />
                   </div>
                 </div>
-                <h3 className="text-sm font-bold text-slate-900 mb-1.5">{w.title}</h3>
+                <h3 className="text-sm font-bold text-slate-900 mb-1.5 group-hover:text-[#6C8BEB] transition-colors">{w.title}</h3>
                 <p className="text-xs text-slate-600 leading-normal font-medium">{w.text}</p>
+                <div className="mt-4 pt-2 border-t border-[#CEB5FF]/30 flex items-center text-[11px] font-bold text-[#80A8FF] group-hover:text-[#6C8BEB] transition-colors">
+                  <span>Open Step &rarr;</span>
+                </div>
               </div>
             );
           })}
@@ -342,9 +416,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
         {/* Architecture Node Diagram with 3D Depth & Pure Gold Highlights */}
         <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Frontend */}
-          <div className="rounded-2xl border border-[#8EC1DE]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl card-3d-dark-tactile cursor-pointer">
+          <div
+            onClick={() => handleNavigate('workspace', { scrollToId: 'workspace-viewer' })}
+            className="rounded-2xl border border-[#8EC1DE]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl card-3d-dark-tactile cursor-pointer group hover:border-[#8EC1DE] transition-all"
+          >
             <div className="flex items-center gap-3 mb-4 text-[#8EC1DE]">
-              <Server className="h-5 w-5" />
+              <Server className="h-5 w-5 group-hover:scale-110 transition-transform" />
               <h3 className="text-sm font-bold text-white">Client & Visualization Tier</h3>
             </div>
             <ul className="space-y-2 text-xs text-[#D3D3FF]">
@@ -353,12 +430,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
               <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[#8EC1DE]" /> HTML5 Canvas / WebGL Inspector</li>
               <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[#8EC1DE]" /> Framer Motion Micro-Interactions</li>
             </ul>
+            <div className="mt-4 pt-2 border-t border-slate-800 text-[11px] font-bold text-[#8EC1DE] flex items-center justify-between">
+              <span>Open Visualization Hub</span>
+              <span>&rarr;</span>
+            </div>
           </div>
 
           {/* Backend API */}
-          <div className="rounded-2xl border border-[#CEB5FF]/50 bg-slate-900/90 p-6 backdrop-blur-md ring-2 ring-[#CEB5FF]/30 shadow-xl card-3d-dark-tactile cursor-pointer">
+          <div
+            onClick={() => handleNavigate('pipeline', { scrollToId: 'batch-pipeline-monitor' })}
+            className="rounded-2xl border border-[#CEB5FF]/50 bg-slate-900/90 p-6 backdrop-blur-md ring-2 ring-[#CEB5FF]/30 shadow-xl card-3d-dark-tactile cursor-pointer group hover:border-[#CEB5FF] transition-all"
+          >
             <div className="flex items-center gap-3 mb-4 text-[#CEB5FF]">
-              <Cpu className="h-5 w-5" />
+              <Cpu className="h-5 w-5 group-hover:scale-110 transition-transform" />
               <h3 className="text-sm font-bold text-white">FastAPI & Inference Core</h3>
             </div>
             <ul className="space-y-2 text-xs text-[#D3D3FF]">
@@ -367,12 +451,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
               <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[#CEB5FF]" /> OpenCV Metrology Operators</li>
               <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[#CEB5FF]" /> ONNX Runtime / TensorRT FP16</li>
             </ul>
+            <div className="mt-4 pt-2 border-t border-slate-800 text-[11px] font-bold text-[#CEB5FF] flex items-center justify-between">
+              <span>Inspect Inference Core</span>
+              <span>&rarr;</span>
+            </div>
           </div>
 
           {/* AI Models */}
-          <div className="rounded-2xl border border-[#80A8FF]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl card-3d-dark-tactile cursor-pointer">
+          <div
+            onClick={() => handleNavigate('workspace', { viewMode: 'restored', scrollToId: 'workspace-viewer' })}
+            className="rounded-2xl border border-[#80A8FF]/30 bg-slate-900/80 p-6 backdrop-blur-md shadow-xl card-3d-dark-tactile cursor-pointer group hover:border-[#80A8FF] transition-all"
+          >
             <div className="flex items-center gap-3 mb-4 text-[#80A8FF]">
-              <Layers className="h-5 w-5" />
+              <Layers className="h-5 w-5 group-hover:scale-110 transition-transform" />
               <h3 className="text-sm font-bold text-white">Deep AI Models</h3>
             </div>
             <ul className="space-y-2 text-xs text-[#D3D3FF]">
@@ -381,6 +472,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ setActiveTab }) => {
               <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[#80A8FF]" /> CLAHE Adaptive Contrast</li>
               <li className="flex items-center gap-2"><CheckCircle2 className="h-3.5 w-3.5 text-[#80A8FF]" /> Real-time PSNR & SSIM Metrics</li>
             </ul>
+            <div className="mt-4 pt-2 border-t border-slate-800 text-[11px] font-bold text-[#80A8FF] flex items-center justify-between">
+              <span>Test AI Models</span>
+              <span>&rarr;</span>
+            </div>
           </div>
         </div>
       </section>
